@@ -10,3 +10,17 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/iiif-image-model-api/target/
+/iiif-image-frontend-impl-springmvc/target/
+/iiif-image-model-impl/target/
+/iiif-image-business-impl/target/
+/iiif-image-business-api/target/
+/iiif-image-backend-api/target/
+/iiif-image-backend-impl/target/
+/iiif-image-backend-impl/src/main/resources/native/jpegtran-jni.o
+/iiif-image-backend-impl/src/main/resources/native/jpegtran.o
+/iiif-image-backend-impl/src/main/resources/native/org_mdz_jpegtran_Transformation.h
+/iiif-image-backend-impl/src/main/resources/native/transupp.o
+/iiif-image-backend-impl/src/main/resources/native/epeg_main.o
+/iiif-image-backend-impl/src/main/resources/native/cdjpeg.o
+/iiif-image-backend-impl/nbproject/
