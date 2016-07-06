@@ -2,7 +2,7 @@ package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller;
 
 import de.digitalcollections.iiif.image.backend.impl.cache.BufferedImageCache;
 import de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException;
-import de.digitalcollections.iiif.image.config.SpringConfigBackend;
+import de.digitalcollections.iiif.image.config.SpringConfigBackendImage;
 import java.awt.image.BufferedImage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
   "de.digitalcollections.iiif.image.backend.impl.repository",
   "de.digitalcollections.iiif.image.backend.impl.resolver"
 }, excludeFilters = {
-  @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SpringConfigBackend.class)
+  @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SpringConfigBackendImage.class)
 })
 @PropertySource(value = {
   "classpath:de/digitalcollections/iiif/image/config/SpringConfigBackend-${spring.profiles.active:PROD}.properties"

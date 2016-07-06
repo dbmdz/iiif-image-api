@@ -22,9 +22,9 @@ import org.springframework.util.StringUtils;
 @PropertySource(value = {
   "classpath:de/digitalcollections/iiif/image/config/SpringConfigBackend-${spring.profiles.active:PROD}.properties"
 })
-public class SpringConfigBackend {
+public class SpringConfigBackendImage {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SpringConfigBackend.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SpringConfigBackendImage.class);
 
   @Bean
   public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {

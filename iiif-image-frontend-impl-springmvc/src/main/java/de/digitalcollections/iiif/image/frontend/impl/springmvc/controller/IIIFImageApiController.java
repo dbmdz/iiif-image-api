@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@CrossOrigin
 @RequestMapping("/iiif/image")
 public class IIIFImageApiController {
 
@@ -96,7 +95,7 @@ public class IIIFImageApiController {
    * @throws URISyntaxException
    * @throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException
    */
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
   @RequestMapping(value = "{identifier}/{region}/{size}/{rotation}/{quality}.{format}")
   public ResponseEntity<byte[]> getImageRepresentation(
           @PathVariable String identifier, @PathVariable String region,
@@ -166,7 +165,7 @@ public class IIIFImageApiController {
    * @throws java.io.IOException
    */
   @SuppressWarnings("unchecked")
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
   @RequestMapping(value = "{identifier}/info.json", method = RequestMethod.GET)
   public ResponseEntity<String> getInfo(@PathVariable String identifier,
           HttpServletRequest request) throws ResolvingException,
@@ -205,7 +204,7 @@ public class IIIFImageApiController {
     }
   }
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
   @RequestMapping(value = "{identifier}", method = RequestMethod.GET)
   public String getInfoRedirect(@PathVariable String identifier
   ) {

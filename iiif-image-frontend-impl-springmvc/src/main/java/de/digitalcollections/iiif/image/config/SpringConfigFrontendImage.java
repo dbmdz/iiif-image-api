@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
   "de.digitalcollections.iiif.image.frontend.impl.springmvc.controller"
 })
 @EnableWebMvc
-public class SpringConfigFrontend extends WebMvcConfigurerAdapter {
+public class SpringConfigFrontendImage extends WebMvcConfigurerAdapter {
 
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
