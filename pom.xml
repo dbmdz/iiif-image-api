@@ -5,7 +5,7 @@
 
   <groupId>de.digitalcollections</groupId>
   <artifactId>iiif-image-api</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>0-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>IIIF: IIIF Image API Library</name>
@@ -31,10 +31,16 @@
     <version.slf4j>1.7.13</version.slf4j>
     <version.spring-framework>4.2.5.RELEASE</version.spring-framework>
     <version.twelvemonkeys-imageio>3.2.1</version.twelvemonkeys-imageio>
+    <version.versions-maven-plugin>2.2</version.versions-maven-plugin>
   </properties>
     
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${version.versions-maven-plugin}</version>
+      </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${version.maven-surefire-plugin}</version>
