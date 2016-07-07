@@ -10,7 +10,7 @@ deploy:
   api_key:
     secure: KgL5+v/SSWE0m1O0dK7K9QlUjyfyZzUj1lC5u2NQaIf2ogHTrXZQhd/Mbr06jupHVJhUVe0PriQzsVVL1OPWnkyc9fP/hbDbxjxcdFYwBxsKdgt6PF+trHI0rsEDa+0dbL9rHrZF/R41oIfbF0LeqzVxjirJkgwUaSWumdVS5BoVh30HHvUDnx29HaVjK11uoOI49K4VsGNMj9LfEt9bu1qeyKPeCMpvcl41EWaBRJgPIEs0uo1igyDnXUAiO88GYynTCt9/wPyrEYgTXvanDVvdXnXJwLo/DsDb/dScJXlYXGw4fYxZspILzocdTohKz+N761KcwDhKgycorT3rSyHBQNSDw3SsV4KY71RBtjTas80K8SdwjSjxC+5zxzCDLFoLd+pYFFiUSGyzQlIJBbEcnUvFr1TfG6hqxnNEkiu3SB5gtLqsFyTiZih6I617hVdPMTTN6WpKlt925IqeQO+yAwq/cSp6OT9k+Ei9//SBCSoY21Smvd6rhgEMTBTaNW1isalZ/JxcdBfIdsbeO1iP+IEjKEsggJIXMhweQbEA21yZ5Wy9jZ4kiFSNwQFcoinkISBY4+L2wZy7JYcPEAMT9OXrxUCvGkMCTs6ZZWKDVcXJjyfPOV00OigT3hLEtGugGejTCWA5g8o83jOBIZn8W09vjce+xSh8ZHdX/WE=
   file_glob: true
-  file: **/target/*.jar
+  file: "**/target/*.jar"
   skip_cleanup: true
   on:
     tags: true
