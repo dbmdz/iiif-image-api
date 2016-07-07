@@ -67,7 +67,7 @@ Usage
 
 FAQ
 ---
-- <b>Q</b>: The JSON output for IIIF Presentation API is not correct.<br/>
+<b>Q</b>: The JSON output for IIIF Presentation API is not correct.<br/>
 <b>A</b>: Be sure that Jackson object mapping is configured correctly. The SpringConfigIIIF overrides the method "configureMessageConverters(...)" and configures the MappingJackson2HttpMessageConverter's ObjectMapper properly. But if you override the method in your Spring MVC configuration class, the SpringConfigIIIF message converters configuration is ignored (the root beans rules...).<br/>
 Solution: Add proper ObjectMapper configuration to your config. For IIIF this is needed:
 
