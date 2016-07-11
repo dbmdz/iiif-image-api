@@ -74,27 +74,9 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
     }
     RegionParameters params = new RegionParametersImpl();
     if (region.startsWith("pct:")) {
-      /*
-             * pct:x,y,w,h
-             * The region to be returned is specified as a sequence of percentages of the full image’s dimensions,
-             * as reported in the Image Information document.
-             * Thus, x represents the number of pixels from the 0 position on the horizontal axis, calculated as a
-             * percentage of the reported width.
-             * w represents the width of the region, also calculated as a percentage of the reported width.
-             * The same applies to y and h respectively.
-             * These may be floating point numbers.
-       */
       region = region.substring("pct:".length());
       params.setAbsolute(false);
     } else {
-      /*
-             * x,y,w,h
-             * The region of the full image to be returned is defined in terms of absolute pixel values.
-             * The value of x represents the number of pixels from the 0 position on the horizontal axis.
-             * The value of y represents the number of pixels from the 0 position on the vertical axis.
-             * Thus the x,y position 0,0 is the upper left-most pixel of the image.
-             * w represents the width of the region and h represents the height of the region in pixels.
-       */
       params.setAbsolute(true);
     }
     float[] dimensions = parseFloatValues(region, 4);

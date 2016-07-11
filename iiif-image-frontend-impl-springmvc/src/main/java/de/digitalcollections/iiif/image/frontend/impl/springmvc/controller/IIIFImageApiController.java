@@ -66,16 +66,17 @@ public class IIIFImageApiController {
   }
 
   /**
-   * see <a href="http://iiif.io/api/image/2.0/#image-request-uri-syntax">IIIF 2.0</a><br/>
+   * see <a href="http://iiif.io/api/image/2.0/#image-request-uri-syntax">IIIF 2.0</a><br>
+   *
    * The sequence of parameters in the URI is intended as a mnemonic for the order in which image manipulations are made
    * against the full image content. This is important to consider when implementing the service because applying the
    * same parameters in a different sequence will often result in a different image being delivered. The order is
-   * critical so that the application calling the service reliably receives the output it expects.<br/>
-   * The parameters should be interpreted as if the the sequence of image manipulations were:<br/>
-   * <b>Region THEN Size THEN Rotation THEN Quality THEN Format</b><br/>
+   * critical so that the application calling the service reliably receives the output it expects.<br>
+   * The parameters should be interpreted as if the the sequence of image manipulations were:<br>
+   * <b>Region THEN Size THEN Rotation THEN Quality THEN Format</b><br>
    * If the rotation parameter includes mirroring (“!”), the mirroring is applied before the rotation.
    *
-   * @param identifier
+   * @param identifier unique identifier of image
    * @param region The region parameter defines the rectangular portion of the full image to be returned. Region can be
    * specified by pixel coordinates, percentage or by the value “full”, which specifies that the entire image should be
    * returned.
@@ -86,14 +87,15 @@ public class IIIFImageApiController {
    * @param quality The quality parameter determines whether the image is delivered in color, grayscale or black and
    * white.
    * @param format The format of the returned image is expressed as an extension at the end of the URI.
-   * @param request
-   * @return
-   * @throws ResolvingException
-   * @throws UnsupportedFormatException
-   * @throws UnsupportedOperationException
-   * @throws IOException on
-   * @throws URISyntaxException
-   * @throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException
+   * @param request http request
+   * @return the transformed image
+   * @throws ResolvingException if identifier can not be resolved to an image
+   * @throws UnsupportedFormatException if target format is not supported
+   * @throws UnsupportedOperationException if operation is not supported
+   * @throws IOException if image can not be read
+   * @throws URISyntaxException if uri for image is erroneous
+   * @throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException if parameters
+   * can not be parsed
    */
   @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
   @RequestMapping(value = "{identifier}/{region}/{size}/{rotation}/{quality}.{format}")
@@ -159,10 +161,10 @@ public class IIIFImageApiController {
    *
    * @param identifier - The identifier to obtain information for
    * @param request servlet request
-   * @return String - The information in JSON notation
-   * @throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException
-   * @throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException
-   * @throws java.io.IOException
+   * @return The information in JSON notation
+   * @throws ResolvingException if identifier can not be resolved to an image
+   * @throws UnsupportedFormatException if target format is not supported
+   * @throws IOException if image can not be read
    */
   @SuppressWarnings("unchecked")
   @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})

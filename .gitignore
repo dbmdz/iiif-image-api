@@ -24,3 +24,4 @@ hs_err_pid*
 /iiif-image-backend-impl/src/main/resources/native/epeg_main.o
 /iiif-image-backend-impl/src/main/resources/native/cdjpeg.o
 /iiif-image-backend-impl/nbproject/
+/target/

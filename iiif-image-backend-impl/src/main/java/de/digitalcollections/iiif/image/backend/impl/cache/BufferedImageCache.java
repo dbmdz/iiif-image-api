@@ -17,13 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * LRU-Cache for buffered images using ImageIO read/write on filesystem. Least Recently Used (LRU): ategie, die die
- *
- * Werte im Cache nach der letzten Nutzung sortiert. Wird auf ein Element über en längeren Zeitraum nicht mehr
- *
- * zugegriffen, so wird es aus dem Cache verdrängt.
- *
- * @author ralf
+ * LRU-Cache for buffered images using ImageIO read/write on filesystem. Least Recently Used (LRU): Strategy sorting
+ * objects in cache according to last usage. If an element is not accessed a longer time it will be pushed out of cache:
  */
 public class BufferedImageCache {
 
@@ -36,6 +31,9 @@ public class BufferedImageCache {
    */
   private String cacheDir;
 
+  /**
+   * @return directory of cached images
+   */
   public String getCacheDir() {
     return cacheDir;
   }
@@ -75,6 +73,12 @@ public class BufferedImageCache {
             });
   }
 
+  /**
+   * Checks if an image is cached.
+   *
+   * @param identifier unique identifier for image
+   * @return true if image is in cache
+   */
   public boolean isCached(String identifier) {
     return getInternalMap().containsKey(identifier);
   }
@@ -84,7 +88,7 @@ public class BufferedImageCache {
    *
    * @param key cache key
    * @param bi image to be cached
-   * @throws de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException
+   * @throws PersistenceException if image can not be written to cache
    */
   public void put(String key, BufferedImage bi) throws PersistenceException {
     try {
@@ -110,7 +114,8 @@ public class BufferedImageCache {
         getInternalMap().put(key, bi);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.error("Can not write image to cache", e);
+      throw new PersistenceException(e);
     }
 
   }
@@ -118,9 +123,9 @@ public class BufferedImageCache {
   /**
    * Retrieves the requested object from the cache
    *
-   * @param key
-   * @return
-   * @throws de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException
+   * @param key cache key
+   * @return cached image
+   * @throws PersistenceException if image can not be read from cache
    */
   public BufferedImage get(String key) throws PersistenceException {
     try {
@@ -133,15 +138,13 @@ public class BufferedImageCache {
       }
       return image;
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.error("Can not read image from cache", e);
       throw new PersistenceException(e);
     }
   }
 
   /**
-   * Returns a set of all cache keys
-   *
-   * @return
+   * @return a set of all cache keys
    */
   public Map<String, Object> getInternalMap() {
     // Load our keys from the filesystem
@@ -156,11 +159,13 @@ public class BufferedImageCache {
         }
       }
     }
-
     // Return our keys
     return this.internalMap;
   }
 
+  /**
+   * @param cacheDir cache directory
+   */
   public void setCacheDir(String cacheDir) {
     File f = new File(cacheDir);
     if (!f.exists()) {
@@ -171,10 +176,10 @@ public class BufferedImageCache {
   }
 
   /**
-   * Sets PersistenceEngine specific properties
+   * Sets PersistenceEngine specific properties ("cache-dir" and "compression-quality")
    *
-   * @param name
-   * @param value
+   * @param name name of property
+   * @param value value of property
    */
   public void setProperty(String name, String value) {
     if (name.equalsIgnoreCase("cache-dir")) {
@@ -187,7 +192,7 @@ public class BufferedImageCache {
   /**
    * Allows a PersistenceEngine to be initialized with a set of name/value pairs
    *
-   * @param p
+   * @param p set of properties (name, value)-pairs
    */
   public void init(Properties p) {
     String cacheDirValue = p.getProperty("cache-dir");
@@ -205,8 +210,8 @@ public class BufferedImageCache {
   /**
    * Removes the specified object from the cache
    *
-   * @param key
-   * @throws de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException
+   * @param key cache key for object
+   * @throws PersistenceException if object can not be removed from cache
    */
   public void remove(String key) throws PersistenceException {
     try {
@@ -229,7 +234,7 @@ public class BufferedImageCache {
   /**
    * Removes all objects from the cache
    *
-   * @throws de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException
+   * @throws PersistenceException if not all objects can be removed from cache
    */
   public void removeAll() throws PersistenceException {
     try {
