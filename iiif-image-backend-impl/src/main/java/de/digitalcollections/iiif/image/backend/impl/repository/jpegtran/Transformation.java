@@ -16,8 +16,6 @@ public class Transformation {
     }
   }
 
-  private static final int MAX_FILE_SIZE = 20000000;
-
   /**
    * Downscale the image.
    *
