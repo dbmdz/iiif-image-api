@@ -1,10 +1,10 @@
-package de.digitalcollections.iiif.image.business.api.service;
+package de.digitalcollections.iiif.image.business.api.service.v2_0_0;
 
-import de.digitalcollections.iiif.image.model.api.Image;
-import de.digitalcollections.iiif.image.model.api.ImageInfo;
-import de.digitalcollections.iiif.image.model.api.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.ResizeParameters;
-import de.digitalcollections.iiif.image.model.api.RotationParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ImageInfo;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;

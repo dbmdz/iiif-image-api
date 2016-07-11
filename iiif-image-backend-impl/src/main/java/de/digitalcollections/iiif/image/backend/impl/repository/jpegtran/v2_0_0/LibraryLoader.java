@@ -1,4 +1,4 @@
-package de.digitalcollections.iiif.image.backend.impl.repository.jpegtran;
+package de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0;
 
 import java.io.File;
 import java.io.FileOutputStream;

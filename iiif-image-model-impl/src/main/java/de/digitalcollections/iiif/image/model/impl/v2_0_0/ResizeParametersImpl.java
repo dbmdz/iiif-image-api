@@ -1,6 +1,6 @@
-package de.digitalcollections.iiif.image.model.impl;
+package de.digitalcollections.iiif.image.model.impl.v2_0_0;
 
-import de.digitalcollections.iiif.image.model.api.ResizeParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

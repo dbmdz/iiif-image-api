@@ -1,5 +1,6 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.jpegtran;
 
+import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0.JpegImage;
 import de.digitalcollections.iiif.image.JniTest;
 import java.io.IOException;
 import java.io.InputStream;

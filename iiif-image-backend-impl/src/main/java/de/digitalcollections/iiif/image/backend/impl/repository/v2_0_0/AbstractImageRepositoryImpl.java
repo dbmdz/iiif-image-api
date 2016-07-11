@@ -1,16 +1,16 @@
-package de.digitalcollections.iiif.image.backend.impl.repository;
+package de.digitalcollections.iiif.image.backend.impl.repository.v2_0_0;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import de.digitalcollections.iiif.image.backend.api.repository.ImageRepository;
+import de.digitalcollections.iiif.image.backend.api.repository.v2_0_0.ImageRepository;
 import de.digitalcollections.iiif.image.backend.api.resolver.ImageResolver;
-import de.digitalcollections.iiif.image.model.api.Image;
-import de.digitalcollections.iiif.image.model.api.ImageInfo;
-import de.digitalcollections.iiif.image.model.api.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
-import de.digitalcollections.iiif.image.model.impl.ImageInfoImpl;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ImageInfo;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
+import de.digitalcollections.iiif.image.model.impl.v2_0_0.ImageInfoImpl;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,47 +31,36 @@ import org.springframework.core.io.Resource;
 public abstract class AbstractImageRepositoryImpl implements ImageRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractImageRepositoryImpl.class);
-  private final Executor httpExecutor;
+  @Autowired
+  private ApplicationContext applicationContext;
   private boolean forceJpeg;
 
   private final Cache<String, byte[]> httpCache;
+  private final Executor httpExecutor;
 
   @Autowired(required = true)
   List<ImageResolver> resolvers;
-
-  @Autowired
-  private ApplicationContext applicationContext;
 
   public AbstractImageRepositoryImpl() {
     httpExecutor = Executor.newInstance();
     httpCache = CacheBuilder.newBuilder().maximumSize(32).build();
   }
 
-  public void setForceJpeg(boolean forceJpeg) {
-    this.forceJpeg = forceJpeg;
-  }
-
-  public boolean isForceJpeg() {
-    return forceJpeg;
-  }
-
-  @Override
-  public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException {
-    try {
-      // FIXME do not get whole image just for image infos... use imageio reader:
-      // see getImageDimension in DzpIiifPresentationRepositoryImpl
-      Image image = getImage(identifier, null);
-      if (image != null) {
-        ImageInfo imageInfo = new ImageInfoImpl();
-        imageInfo.setFormat(image.getFormat());
-        imageInfo.setHeight(image.getHeight());
-        imageInfo.setWidth(image.getWidth());
-        return imageInfo;
-      }
-    } catch (InvalidParametersException ipe) {
-      // as region == null params can not be invalid
+  protected byte[] convertToJpeg(byte[] data) throws IOException {
+    if ((data[0] & 0xFF) != 0xFF || (data[1] & 0xFF) != 0xD8) {
+      BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+      ImageIO.write(img, "JPEG", os);
+      return os.toByteArray();
+    } else {
+      return data;
     }
-    return null;
+  }
+
+  protected abstract Image createImage(String identifier, RegionParameters region) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException;
+
+  private String getCacheKey(String identifier) {
+    return String.format("iiif.imagedata.%s", identifier);
   }
 
   @Override
@@ -141,8 +130,23 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
     return imageData;
   }
 
-  private String getCacheKey(String identifier) {
-    return String.format("iiif.imagedata.%s", identifier);
+  @Override
+  public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException {
+    try {
+      // FIXME do not get whole image just for image infos... use imageio reader:
+      // see getImageDimension in DzpIiifPresentationRepositoryImpl
+      Image image = getImage(identifier, null);
+      if (image != null) {
+        ImageInfo imageInfo = new ImageInfoImpl();
+        imageInfo.setFormat(image.getFormat());
+        imageInfo.setHeight(image.getHeight());
+        imageInfo.setWidth(image.getWidth());
+        return imageInfo;
+      }
+    } catch (InvalidParametersException ipe) {
+      // as region == null params can not be invalid
+    }
+    return null;
   }
 
   private ImageResolver getImageResolver(String identifier) throws ResolvingException {
@@ -158,16 +162,11 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
     throw new ResolvingException(msg);
   }
 
-  protected byte[] convertToJpeg(byte[] data) throws IOException {
-    if ((data[0] & 0xFF) != 0xFF || (data[1] & 0xFF) != 0xD8) {
-      BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
-      ByteArrayOutputStream os = new ByteArrayOutputStream();
-      ImageIO.write(img, "JPEG", os);
-      return os.toByteArray();
-    } else {
-      return data;
-    }
+  public boolean isForceJpeg() {
+    return forceJpeg;
   }
 
-  protected abstract Image createImage(String identifier, RegionParameters region) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException;
+  public void setForceJpeg(boolean forceJpeg) {
+    this.forceJpeg = forceJpeg;
+  }
 }

@@ -1,18 +1,18 @@
-package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller;
+package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2_0_0;
 
-import de.digitalcollections.iiif.image.business.api.service.IiifParameterParserService;
-import de.digitalcollections.iiif.image.business.api.service.ImageService;
+import de.digitalcollections.iiif.image.business.api.service.v2_0_0.IiifParameterParserService;
+import de.digitalcollections.iiif.image.business.api.service.v2_0_0.ImageService;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResourceNotFoundException;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException;
-import de.digitalcollections.iiif.image.model.api.Image;
-import de.digitalcollections.iiif.image.model.api.ImageInfo;
-import de.digitalcollections.iiif.image.model.api.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.ResizeParameters;
-import de.digitalcollections.iiif.image.model.api.RotationParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ImageInfo;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -32,11 +32,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Controller
-@RequestMapping("/iiif/image")
+@Controller(value = "IIIFImageApiController-v2.0.0")
+@RequestMapping("/iiif/image/2.0.0/")
 public class IIIFImageApiController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IIIFImageApiController.class);
+  public static final String VERSION = "2.0.0";
 
   @Autowired
   private IiifParameterParserService iiifParameterParserService;
@@ -210,6 +211,6 @@ public class IIIFImageApiController {
   @RequestMapping(value = "{identifier}", method = RequestMethod.GET)
   public String getInfoRedirect(@PathVariable String identifier
   ) {
-    return "redirect:/iiif/image/" + identifier + "/info.json";
+    return "redirect:/iiif/image/" + VERSION + "/" + identifier + "/info.json";
   }
 }

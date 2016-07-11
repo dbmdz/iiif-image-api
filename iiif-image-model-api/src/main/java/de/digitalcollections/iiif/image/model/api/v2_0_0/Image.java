@@ -1,4 +1,4 @@
-package de.digitalcollections.iiif.image.model.api;
+package de.digitalcollections.iiif.image.model.api.v2_0_0;
 
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;

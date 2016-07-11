@@ -1,6 +1,6 @@
-package de.digitalcollections.iiif.image.model.impl;
+package de.digitalcollections.iiif.image.model.impl.v2_0_0;
 
-import de.digitalcollections.iiif.image.model.api.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 
 public class RegionParametersImpl implements RegionParameters {

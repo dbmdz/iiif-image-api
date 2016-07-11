@@ -1,10 +1,10 @@
-package de.digitalcollections.iiif.image.backend.impl.repository;
+package de.digitalcollections.iiif.image.backend.impl.repository.v2_0_0;
 
 import de.digitalcollections.iiif.image.backend.impl.cache.BufferedImageCache;
 import de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException;
-import de.digitalcollections.iiif.image.backend.impl.repository.imageio.JAIImage;
-import de.digitalcollections.iiif.image.model.api.Image;
-import de.digitalcollections.iiif.image.model.api.RegionParameters;
+import de.digitalcollections.iiif.image.backend.impl.repository.imageio.v2_0_0.JAIImage;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;

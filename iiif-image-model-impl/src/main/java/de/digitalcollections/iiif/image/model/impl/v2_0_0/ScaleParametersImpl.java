@@ -1,6 +1,6 @@
-package de.digitalcollections.iiif.image.model.impl;
+package de.digitalcollections.iiif.image.model.impl.v2_0_0;
 
-import de.digitalcollections.iiif.image.model.api.ScaleParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ScaleParameters;
 
 public class ScaleParametersImpl implements ScaleParameters {
 

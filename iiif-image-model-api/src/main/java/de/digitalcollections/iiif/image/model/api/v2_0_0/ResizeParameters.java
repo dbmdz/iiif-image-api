@@ -1,4 +1,4 @@
-package de.digitalcollections.iiif.image.model.api;
+package de.digitalcollections.iiif.image.model.api.v2_0_0;
 
 /**
  * Container for type safe image resizing parameters.
