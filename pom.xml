@@ -41,6 +41,7 @@
   <scm>
     <connection>https://github.com/dbmdz/iiif-image-api.git</connection>
     <developerConnection>git@github.com:dbmdz/iiif-image-api.git</developerConnection>
+    <url>https://github.com/dbmdz/iiif-image-api</url>
   </scm>
 
   <properties>
