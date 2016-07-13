@@ -5,6 +5,7 @@
 [![codecov](https://codecov.io/gh/dbmdz/iiif-image-api/branch/master/graph/badge.svg)](https://codecov.io/gh/dbmdz/iiif-image-api)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![GitHub release](https://img.shields.io/github/release/dbmdz/iiif-image-api.svg?maxAge=2592000)](https://github.com/dbmdz/iiif-image-api/releases)
+[![Maven Central](https://img.shields.io/maven-central/v/de.digitalcollections/iiif-image-api.svg?maxAge=2592000)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22iiif-image-api%22)
 
 This Java library implements the IIIF Image API 2.0.0 (see <a href="http://iiif.io/api/image/2.0/">http://iiif.io/api/image/2.0/</a>):
 
