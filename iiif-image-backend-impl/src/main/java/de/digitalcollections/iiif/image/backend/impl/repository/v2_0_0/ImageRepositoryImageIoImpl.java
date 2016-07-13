@@ -3,12 +3,12 @@ package de.digitalcollections.iiif.image.backend.impl.repository.v2_0_0;
 import de.digitalcollections.iiif.image.backend.impl.cache.BufferedImageCache;
 import de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException;
 import de.digitalcollections.iiif.image.backend.impl.repository.imageio.v2_0_0.JAIImage;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashSet;
@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StopWatch;
 
-@Repository(value = "ImageRepositoryImageIoImpl")
+@Repository(value = "ImageRepositoryImageIoImpl-v2.0.0")
 public class ImageRepositoryImageIoImpl extends AbstractImageRepositoryImpl {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ImageRepositoryImageIoImpl.class);

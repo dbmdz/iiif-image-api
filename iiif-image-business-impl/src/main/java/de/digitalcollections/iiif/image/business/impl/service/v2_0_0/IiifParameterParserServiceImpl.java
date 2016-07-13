@@ -1,13 +1,13 @@
 package de.digitalcollections.iiif.image.business.impl.service.v2_0_0;
 
 import de.digitalcollections.iiif.image.business.api.service.v2_0_0.IiifParameterParserService;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
 import de.digitalcollections.iiif.image.model.impl.v2_0_0.RegionParametersImpl;
 import de.digitalcollections.iiif.image.model.impl.v2_0_0.ResizeParametersImpl;
 import de.digitalcollections.iiif.image.model.impl.v2_0_0.RotationParametersImpl;
@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service(value = "IiifParameterParserServiceImpl-v2.0.0")
 public class IiifParameterParserServiceImpl implements IiifParameterParserService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IiifParameterParserServiceImpl.class);

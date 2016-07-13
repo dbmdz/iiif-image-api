@@ -3,16 +3,16 @@ package de.digitalcollections.iiif.image.business.impl.service.v2_0_0;
 import de.digitalcollections.iiif.image.backend.api.repository.v2_0_0.ImageRepository;
 import de.digitalcollections.iiif.image.business.api.service.ImageSecurityService;
 import de.digitalcollections.iiif.image.business.api.service.v2_0_0.ImageService;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.ImageInfo;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ImageInfo;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
 import de.digitalcollections.iiif.image.model.impl.v2_0_0.ResizeParametersImpl;
 import java.util.List;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service("imageService")
+@Service(value = "ImageServiceImpl-v2.0.0")
 public class ImageServiceImpl implements ImageService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceImpl.class);

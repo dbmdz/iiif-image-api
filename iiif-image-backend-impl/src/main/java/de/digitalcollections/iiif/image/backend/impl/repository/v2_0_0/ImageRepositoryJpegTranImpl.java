@@ -1,13 +1,13 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.v2_0_0;
 
 import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0.JpegTranImage;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
-import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +17,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Repository;
 
-@Repository(value = "ImageRepositoryJpegTranImpl")
+@Repository(value = "ImageRepositoryJpegTranImpl-v2.0.0")
 public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl implements PriorityOrdered {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ImageRepositoryJpegTranImpl.class);
