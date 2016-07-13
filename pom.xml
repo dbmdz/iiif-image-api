@@ -10,7 +10,39 @@
   
   <name>IIIF: IIIF Image API Library</name>
   <description>Java library implementing the IIIF Image API 2.0.0 (see http://iiif.io/api/image/2.0/)</description>
-  
+  <url>https://github.com/dbmdz/iiif-image-api</url>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://github.com/dbmdz/iiif-image-api/blob/master/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Johannes Baiter</name>
+      <email>johannes.baiter@bsb-muenchen.de</email>
+      <id>jbaiter</id>
+    </developer>
+    <developer>
+      <name>Ralf Eichinger</name>
+      <email>ralf.eichinger@gmail.com</email>
+      <id>datazuul</id>
+    </developer>
+  </developers>
+  <ciManagement>
+    <url>https://travis-ci.org/dbmdz/iiif-image-api</url>
+    <system>Travis CI</system>
+  </ciManagement>
+  <issueManagement>
+    <url>https://github.com/dbmdz/iiif-image-api/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
+  <scm>
+    <connection>https://github.com/dbmdz/iiif-image-api.git</connection>
+    <developerConnection>git@github.com:dbmdz/iiif-image-api.git</developerConnection>
+  </scm>
+
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
