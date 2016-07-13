@@ -7,7 +7,7 @@
 [![GitHub release](https://img.shields.io/github/release/dbmdz/iiif-image-api.svg?maxAge=2592000)](https://github.com/dbmdz/iiif-image-api/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/de.digitalcollections/iiif-image-api.svg?maxAge=2592000)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22iiif-image-api%22)
 
-This Java libraries implement the IIIF Image API 2.0.0 (see <a href="http://iiif.io/api/image/2.0/">http://iiif.io/api/image/2.0/</a>):
+These Java libraries implement the IIIF Image API 2.0.0 (see <a href="http://iiif.io/api/image/2.0/">http://iiif.io/api/image/2.0/</a>):
 
 "The IIIF Image API specifies a web service that returns an image in response to a standard HTTP or HTTPS request. The URI can specify the region, size, rotation, quality characteristics and format of the requested image. A URI can also be constructed to request basic technical information about the image to support client applications. This API was conceived of to facilitate systematic reuse of image resources in digital image repositories maintained by cultural heritage organizations. It could be adopted by any image repository or service, and can be used to retrieve static images in response to a properly constructed URI."
 
