@@ -124,3 +124,11 @@ public class WebappInitializer extends AbstractAnnotationConfigDispatcherServlet
 [2016-07-13 15:41:29,868 INFO ] [...] RequestMappingHandlerMapping (main    ) > Mapped "{[/iiif/image/2.0.0/{identifier}/{region}/{size}/{rotation}/{quality}.{format}]}" onto public org.springframework.http.ResponseEntity<byte[]> de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2_0_0.IIIFImageApiController.getImageRepresentation(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,javax.servlet.http.HttpServletRequest) throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException,java.lang.UnsupportedOperationException,java.io.IOException,java.net.URISyntaxException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException
 ...
 ```
+
+### Local build
+
+Clone project and build it:
+
+```shell
+$ mvn clean install
+```
