@@ -69,6 +69,7 @@
     <version.slf4j>1.7.13</version.slf4j>
     <version.spring-framework>4.2.5.RELEASE</version.spring-framework>
     <version.twelvemonkeys-imageio>3.2.1</version.twelvemonkeys-imageio>
+    <version.twelvemonkeys-servlet>3.2.1</version.twelvemonkeys-servlet>
     <version.versions-maven-plugin>2.2</version.versions-maven-plugin>
   </properties>
     
@@ -188,6 +189,11 @@
         <groupId>com.twelvemonkeys.imageio</groupId>
         <artifactId>imageio-core</artifactId>
         <version>${version.twelvemonkeys-imageio}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.twelvemonkeys.servlet</groupId>
+        <artifactId>servlet</artifactId>
+        <version>${version.twelvemonkeys-servlet}</version>
       </dependency>
       <dependency>
         <groupId>com.twelvemonkeys.imageio</groupId>
