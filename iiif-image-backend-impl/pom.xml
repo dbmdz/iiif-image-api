@@ -10,7 +10,7 @@
   
   <artifactId>iiif-image-backend-impl</artifactId>
   <packaging>jar</packaging>
-  <name>IIIF: IIIF Image API Library (Backend IMPL)</name>
+  <name>DigitalCollections: IIIF Image API Library (Backend IMPL)</name>
   
   <dependencies>
     <dependency>

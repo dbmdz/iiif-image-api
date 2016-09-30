@@ -10,7 +10,7 @@
   
   <artifactId>iiif-image-business-impl</artifactId>
   <packaging>jar</packaging>
-  <name>IIIF: IIIF Image API Library (Business IMPL)</name>
+  <name>DigitalCollections: IIIF Image API Library (Business IMPL)</name>
   
   <dependencies>
     <dependency>

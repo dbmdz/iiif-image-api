@@ -8,7 +8,7 @@
   <version>0-SNAPSHOT</version>
   <packaging>pom</packaging>
   
-  <name>IIIF: IIIF Image API Library</name>
+  <name>DigitalCollections: IIIF Image API Library</name>
   <description>Java library implementing the IIIF Image API 2.0.0 (see http://iiif.io/api/image/2.0/)</description>
   <url>https://github.com/dbmdz/iiif-image-api</url>
   <licenses>

@@ -10,7 +10,7 @@
   
   <artifactId>iiif-image-model-impl</artifactId>
   <packaging>jar</packaging>
-  <name>IIIF: IIIF Image API Library (Model IMPL)</name>
+  <name>DigitalCollections: IIIF Image API Library (Model IMPL)</name>
   
   <dependencies>
     <dependency>

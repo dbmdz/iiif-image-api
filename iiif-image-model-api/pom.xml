@@ -10,5 +10,5 @@
   
   <artifactId>iiif-image-model-api</artifactId>
   <packaging>jar</packaging>
-  <name>IIIF: IIIF Image API Library (Model API)</name>
+  <name>DigitalCollections: IIIF Image API Library (Model API)</name>
 </project>

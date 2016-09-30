@@ -11,7 +11,7 @@
   <groupId>de.digitalcollections</groupId>
   <artifactId>iiif-image-frontend-impl-springmvc</artifactId>
   <packaging>jar</packaging>
-  <name>IIIF: IIIF Image API Library (Frontend IMPL Spring MVC)</name>
+  <name>DigitalCollections: IIIF Image API Library (Frontend IMPL Spring MVC)</name>
   
   <dependencies>
     <dependency>
