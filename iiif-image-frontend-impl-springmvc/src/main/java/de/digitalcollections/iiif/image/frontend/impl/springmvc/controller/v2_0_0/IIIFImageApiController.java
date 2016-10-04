@@ -13,6 +13,8 @@ import de.digitalcollections.iiif.image.model.api.v2_0_0.ImageInfo;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.TransformationException;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -105,8 +107,9 @@ public class IIIFImageApiController {
           @PathVariable String size, @PathVariable String rotation,
           @PathVariable String quality, @PathVariable String format,
           HttpServletRequest request) throws ResolvingException,
-          UnsupportedFormatException, UnsupportedOperationException, IOException,
-          URISyntaxException, InvalidParametersException {
+      UnsupportedFormatException, UnsupportedOperationException, IOException,
+      URISyntaxException, InvalidParametersException,
+      de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException {
     final String requestURI = request.getRequestURI();
     LOGGER.info("getImageRepresentation for url {}", requestURI);
 
@@ -144,6 +147,8 @@ public class IIIFImageApiController {
       throw new InvalidParametersException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
       throw new UnsupportedFormatException(ex.getMessage());
+    } catch (TransformationException ex) {
+      throw new de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException(ex.getMessage());
     }
   }
 

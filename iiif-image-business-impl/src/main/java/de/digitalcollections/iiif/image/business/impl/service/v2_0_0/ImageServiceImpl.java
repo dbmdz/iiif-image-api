@@ -13,6 +13,7 @@ import de.digitalcollections.iiif.image.model.api.v2_0_0.ImageInfo;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.RotationParameters;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.TransformationException;
 import de.digitalcollections.iiif.image.model.impl.v2_0_0.ResizeParametersImpl;
 import java.util.List;
 import org.slf4j.Logger;
@@ -71,7 +72,7 @@ public class ImageServiceImpl implements ImageService {
 
   @Override
   public Image processImage(String identifier, RegionParameters regionParameters, ResizeParameters sizeParameters, RotationParameters rotationParameters, ImageBitDepth bitDepthParameter, ImageFormat formatParameter)
-          throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException {
+      throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException {
     if (imageSecurityService != null && !imageSecurityService.isAccessAllowed(identifier)) {
       LOGGER.info("Access to image '{}' is not allowed!", identifier);
       throw new ResourceNotFoundException(); // TODO maybe throw an explicitely access disallowed exception
@@ -85,7 +86,7 @@ public class ImageServiceImpl implements ImageService {
   }
 
   private Image transformImage(Image image, RegionParameters regionParameters, ResizeParameters sizeParameters, RotationParameters rotationParameters, ImageBitDepth bitDepthParameter, ImageFormat formatParameter)
-          throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException {
+      throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException {
 
     // now do processing:
     if (regionParameters != null && (image.getWidth() != regionParameters.getWidth() || image.
@@ -115,6 +116,7 @@ public class ImageServiceImpl implements ImageService {
     if (!(formatParameter == image.getFormat())) {
       image = image.convert(formatParameter);
     }
+    image.performTransformation();
     return image;
   }
 

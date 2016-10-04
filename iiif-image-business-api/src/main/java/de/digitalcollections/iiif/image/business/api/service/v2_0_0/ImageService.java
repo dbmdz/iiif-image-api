@@ -9,6 +9,7 @@ import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.TransformationException;
 
 /**
  * Service providing image processing functionality.
@@ -18,6 +19,6 @@ public interface ImageService {
   ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException;
 
   Image processImage(String identifier, RegionParameters regionParameters, ResizeParameters sizeParameters, RotationParameters rotationParameters, ImageBitDepth bitDepthParameter, ImageFormat formatParameter)
-          throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException;
+      throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException;
 
 }

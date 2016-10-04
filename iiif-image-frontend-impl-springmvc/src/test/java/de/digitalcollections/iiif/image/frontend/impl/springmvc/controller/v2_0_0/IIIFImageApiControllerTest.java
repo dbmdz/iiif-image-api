@@ -241,7 +241,7 @@ public class IIIFImageApiControllerTest {
             .andReturn().getResponse().getContentAsByteArray();
     Image image = loadImage(imgData, true);
     Assert.assertEquals(750, image.getHeight());
-    Assert.assertEquals(1024, image.getWidth());
+    Assert.assertEquals(1038, image.getWidth());
   }
 
   @Test
@@ -312,6 +312,6 @@ public class IIIFImageApiControllerTest {
             .andReturn().getResponse().getContentAsByteArray();
     Image image = loadImage(imgData, true);
     Assert.assertEquals(750, image.getWidth());
-    Assert.assertEquals(1024, image.getHeight());
+    Assert.assertEquals(1038, image.getHeight());
   }
 }
