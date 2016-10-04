@@ -12,6 +12,7 @@ EPEG_OBJECTS=$(EPEG_SOURCES:.c=.o)
 all: $(EPEG_SOURCES) $(EPEG_LIB) $(TURBOJPEG_LIB)
 
 $(TURBOJPEG_LIB):
+	cd src/main/native/libjpeg-turbo; autoreconf -fiv
 	mkdir -p build
 	cd build; JNI_CFLAGS="$(JNI_CFLAGS)" ../src/main/native/libjpeg-turbo/configure --with-java
 	make -C build
