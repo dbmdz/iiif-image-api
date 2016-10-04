@@ -5,26 +5,36 @@ import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import java.io.IOException;
 
+/** NOTE: Even though this interface suggests that transformations are lazy,
+ *  this is **not** binding. That is, between the first call to any of the transformation
+ *  methods and the final `performTransformation` call, no assumptions can be made about the
+ *  actual image data. The only guarantee is, that after having called `performTransformation`,
+ *  the image has actually undergone the applied transformations.
+ *  Implementors are encouraged to maintain a flag in the object's state that indicates
+ *  whether a transformation is in progress (i.e. `performTransformation` has not been
+ *  called yet) and raise an UnsupportedOperationException upon calling `toByteArray` if
+ *  the flag is set.
+ */
 public interface Image {
+  ImageFormat getFormat();
 
-  public abstract Image convert(ImageFormat format) throws UnsupportedOperationException;
+  int getHeight();
 
-  public abstract Image crop(RegionParameters params) throws UnsupportedOperationException, InvalidParametersException;
+  int getWidth();
 
-  public Image flipHorizontally();
+  byte[] toByteArray() throws UnsupportedOperationException, IOException;
 
-  abstract ImageFormat getFormat();
+  Image crop(RegionParameters params) throws UnsupportedOperationException, InvalidParametersException;
 
-  public abstract int getHeight();
+  Image scale(ResizeParameters params) throws UnsupportedOperationException, InvalidParametersException;
 
-  public abstract int getWidth();
+  Image rotate(int arcDegree) throws UnsupportedOperationException, InvalidParametersException;
 
-  public abstract Image rotate(int arcDegree) throws UnsupportedOperationException, InvalidParametersException;
+  Image flipHorizontally();
 
-  public abstract Image scale(ResizeParameters params) throws UnsupportedOperationException, InvalidParametersException;
+  Image toDepth(ImageBitDepth depth) throws UnsupportedOperationException;
 
-  public abstract byte[] toByteArray() throws IOException;
+  Image convert(ImageFormat format) throws UnsupportedOperationException;
 
-  public abstract Image toDepth(ImageBitDepth depth) throws UnsupportedOperationException;
-
+  void performTransformation() throws TransformationException;
 }

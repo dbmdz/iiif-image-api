@@ -26,3 +26,7 @@ hs_err_pid*
 /iiif-image-backend-impl/nbproject/
 /target/
 **/pom.xml.versionsBackup
+.idea
+*.iml
+core
+.deps

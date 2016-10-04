@@ -1,11 +1,16 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0;
 
+import java.io.IOException;
+
 import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.ResizeParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
+import de.digitalcollections.iiif.image.model.api.v2_0_0.TransformationException;
+
+import org.libjpegturbo.turbojpeg.TJException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +22,8 @@ public class JpegTranImage implements Image {
   private int height;
   private int width;
 
-  public JpegTranImage(byte[] imgData) {
+
+  public JpegTranImage(byte[] imgData) throws TJException {
     this(new JpegImage(imgData));
   }
 
@@ -33,7 +39,7 @@ public class JpegTranImage implements Image {
 
   @Override
   public Image flipHorizontally() {
-    this.setBackendImage(jpegImage.flipHorizontal());
+    jpegImage.flipHorizontal();
     return this;
   }
 
@@ -53,7 +59,7 @@ public class JpegTranImage implements Image {
   }
 
   @Override
-  public byte[] toByteArray() {
+  public byte[] toByteArray() throws UnsupportedOperationException, IOException {
     return jpegImage.toByteArray();
   }
 
@@ -75,8 +81,8 @@ public class JpegTranImage implements Image {
         height = (int) Math.ceil(getHeight() * (params.getHeight()) / 100);
       }
       if (x >= origWidth || y >= origHeight) {
-        throw new InvalidParametersException(String.
-                format("x and/or y out of bounds (image size is %sx%s)", origWidth, origHeight));
+        throw new InvalidParametersException(
+            String.format("x and/or y out of bounds (image size is %sx%s)", origWidth, origHeight));
       }
       if (width > (origWidth - x)) {
         width = origWidth - x;
@@ -84,7 +90,7 @@ public class JpegTranImage implements Image {
       if (height > (origHeight - y)) {
         height = origHeight - y;
       }
-      setBackendImage(jpegImage.crop(x, y, width, height));
+      jpegImage.crop(x, y, width, height);
     } catch (IllegalArgumentException e) {
       throw new InvalidParametersException(e.getMessage());
     }
@@ -102,10 +108,8 @@ public class JpegTranImage implements Image {
       if (oldWidth == newWidth && oldHeight == newHeight) {
         return this;
       }
-      LOGGER.info("Downscaling from old size {}x{} to new size {}x{}", new String[]{"" + oldWidth,
-        "" + oldHeight, "" + newWidth, "" + newHeight});
-      setBackendImage(jpegImage.downScale(newWidth, newHeight));
-    } catch (IllegalArgumentException e) {
+      jpegImage.downScale(newWidth, newHeight, 85);
+    } catch (IllegalArgumentException|TJException e) {
       LOGGER.error("Downscaling image failed");
       LOGGER.info("ResizeParameters: " + params.toString());
     }
@@ -115,7 +119,7 @@ public class JpegTranImage implements Image {
   @Override
   public Image rotate(int arcDegree) throws InvalidParametersException {
     try {
-      setBackendImage(jpegImage.rotate(arcDegree));
+      jpegImage.rotate(arcDegree);
     } catch (IllegalArgumentException e) {
       throw new InvalidParametersException(e.getMessage());
     }
@@ -124,11 +128,25 @@ public class JpegTranImage implements Image {
 
   @Override
   public Image toDepth(ImageBitDepth depth) throws UnsupportedOperationException {
-    throw new UnsupportedOperationException("Bit depth transformations are not supported.");
+    if (depth.equals(ImageBitDepth.GRAYSCALE)) {
+      jpegImage.toGrayscale();
+      return this;
+    } else {
+      throw new UnsupportedOperationException("Bit depth transformations other than grayscale are not supported.");
+    }
   }
 
   @Override
   public Image convert(ImageFormat format) throws UnsupportedOperationException {
     throw new UnsupportedOperationException("Format conversions are not supported");
+  }
+
+  @Override
+  public void performTransformation() throws TransformationException {
+    try {
+      jpegImage.transform();
+    } catch (TJException e) {
+      throw new TransformationException(e);
+    }
   }
 }

@@ -1,5 +1,7 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.jpegtran;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0.JpegImage;
 import de.digitalcollections.iiif.image.JniTest;
 import java.io.IOException;
@@ -7,21 +9,21 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.not;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import org.assertj.core.data.Percentage;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
+import org.libjpegturbo.turbojpeg.TJException;
 
 @Category(JniTest.class)
 public class JpegImageTest {
 
   private JpegImage image;
+  private int originalHeight;
+  private int originalWidth;
+  private byte[] originalData;
 
   @Rule
   public ExpectedException exception = ExpectedException.none();
@@ -31,7 +33,10 @@ public class JpegImageTest {
     InputStream imgStream = Thread.currentThread()
             .getContextClassLoader()
             .getResourceAsStream("test.jpg");
-    this.image = new JpegImage(IOUtils.toByteArray(imgStream));
+    this.originalData = IOUtils.toByteArray(imgStream);
+    this.image = new JpegImage(originalData);
+    this.originalHeight = this.image.getHeight();
+    this.originalWidth = this.image.getWidth();
   }
 
   @Test
@@ -40,22 +45,22 @@ public class JpegImageTest {
             .getContextClassLoader()
             .getResource("test.jpg");
     JpegImage img = new JpegImage(imgUrl.toURI());
-    assertEquals(img.getWidth(), 480);
-    assertEquals(img.getHeight(), 360);
+    assertThat(img.getWidth()).isEqualTo(480);
+    assertThat(img.getHeight()).isEqualTo(360);
   }
 
   @Test
-  public void testRotate() {
-    JpegImage rotatedImg90 = image.rotate(90);
-    assertEquals(rotatedImg90.getWidth(), image.getHeight());
+  public void testRotate() throws TJException {
+    image.rotate(90).transform();
+    assertThat(image.getWidth()).isEqualTo(originalHeight);
 
-    JpegImage rotatedImg180 = image.rotate(180);
-    assertEquals(rotatedImg180.getWidth(), image.getWidth());
-    assertThat(rotatedImg180.toByteArray(), not(equalTo(image.toByteArray())));
+    image.rotate(180).transform();
+    assertThat(image.getWidth()).isEqualTo(originalHeight);
+    assertThat(image.toByteArray()).isNotEqualTo(originalData);
 
-    JpegImage rotatedImg270 = image.rotate(270);
-    assertEquals(rotatedImg270.getWidth(), image.getHeight());
-    assertThat(rotatedImg270.toByteArray(), not(equalTo(rotatedImg90.toByteArray())));
+    image.rotate(270).transform();
+    assertThat(image.getWidth()).isEqualTo(originalWidth);
+    assertThat(image.toByteArray()).isNotEqualTo(originalData);
 
     exception.expect(IllegalArgumentException.class);
     image.rotate(-90);
@@ -68,42 +73,38 @@ public class JpegImageTest {
   }
 
   @Test
-  public void testFlipVertical() {
-    JpegImage flippedImage = image.flipVertical();
-    assertEquals(flippedImage.getHeight(), image.getHeight());
-    assertThat(flippedImage.toByteArray(), not(equalTo(image.toByteArray())));
+  public void testFlipVertical() throws TJException {
+    image.flipVertical().transform();
+    assertThat(image.getHeight()).isEqualTo(originalHeight);
+    assertThat(image.toByteArray()).isNotEqualTo(originalData);
   }
 
   @Test
-  public void testFlipHorizontal() {
-    JpegImage flippedImageV = image.flipVertical();
-    JpegImage flippedImageH = image.flipHorizontal();
-    assertEquals(flippedImageH.getHeight(), image.getHeight());
-    assertThat(flippedImageH.toByteArray(), not(equalTo(image.toByteArray())));
-    assertThat(flippedImageH.toByteArray(), not(equalTo(flippedImageV.toByteArray())));
+  public void testFlipHorizontal() throws TJException {
+    image.flipHorizontal().transform();
+    assertThat(image.getHeight()).isEqualTo(originalHeight);
+    assertThat(image.toByteArray()).isNotEqualTo(originalData);
   }
 
   @Test
   public void testTranspose() throws Exception {
-    JpegImage transposedImage = image.transpose();
-    assertEquals(transposedImage.getHeight(), image.getWidth());
-    assertThat(transposedImage.toByteArray(), not(equalTo(image.toByteArray())));
+    image.transpose().transform();
+    assertThat(image.getHeight()).isEqualTo(originalWidth);
   }
 
-  @Test
   public void testTransverse() throws Exception {
     JpegImage transposedImage = image.transpose();
     JpegImage transversedImageH = image.transverse();
-    assertEquals(transversedImageH.getHeight(), image.getWidth());
-    assertThat(transversedImageH.toByteArray(), not(equalTo(image.toByteArray())));
-    assertThat(transversedImageH.toByteArray(), not(equalTo(transposedImage.toByteArray())));
+    assertThat(transversedImageH.getHeight()).isEqualTo(image.getWidth());
+    assertThat(transversedImageH.toByteArray()).isNotEqualTo(image.toByteArray());
+    assertThat(transversedImageH.toByteArray()).isNotEqualTo(transposedImage.toByteArray());
   }
 
   @Test
-  public void testDownScale() {
-    JpegImage scaledImg = image.downScale(50, 50);
-    Assert.assertEquals(scaledImg.getWidth(), 50);
-    Assert.assertEquals(scaledImg.getHeight(), 50);
+  public void testDownScale() throws TJException {
+    JpegImage scaledImg = image.downScale(50, 50).transform();
+    assertThat(scaledImg.getWidth()).isEqualTo(50);
+    assertThat(scaledImg.getHeight()).isEqualTo(50);
 
     exception.expect(IllegalArgumentException.class);
     image.downScale(800, 800);
@@ -111,16 +112,16 @@ public class JpegImageTest {
 
   @Test
   public void testCrop() throws Exception {
-    JpegImage croppedImage = image.crop(0, 0, 50, 50);
-    Assert.assertEquals(croppedImage.getWidth(), 50);
-    Assert.assertEquals(croppedImage.getHeight(), 50);
+    JpegImage croppedImage = image.crop(0, 0, 50, 50).transform();
+    assertThat(croppedImage.getWidth()).isEqualTo(50);
+    assertThat(croppedImage.getHeight()).isEqualTo(50);
   }
 
   @Test
   public void TestCropFullWidth() throws Exception {
-    JpegImage croppedImage = image.crop(0, 0, 480, 240);
-    Assert.assertEquals(croppedImage.getWidth(), 480);
-    Assert.assertEquals(croppedImage.getHeight(), 240);
+    JpegImage croppedImage = image.crop(0, 0, 480, 240).transform();
+    assertThat(croppedImage.getWidth()).isEqualTo(480);
+    assertThat(croppedImage.getHeight()).isEqualTo(240);
   }
 
   @Test
@@ -129,9 +130,9 @@ public class JpegImageTest {
             .getContextClassLoader()
             .getResourceAsStream("test3.jpg");
     JpegImage image = new JpegImage(IOUtils.toByteArray(imgStream));
-    JpegImage croppedImage = image.crop(0, 0, 1500, 2048);
-    Assert.assertEquals(croppedImage.getWidth(), 1500);
-    Assert.assertEquals(croppedImage.getHeight(), 2048);
+    JpegImage croppedImage = image.crop(0, 0, 1500, 2048).transform();
+    assertThat(croppedImage.getWidth()).isEqualTo(1500);
+    assertThat(croppedImage.getHeight()).isEqualTo(2048);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -139,4 +140,5 @@ public class JpegImageTest {
     JpegImage image = new JpegImage(new byte[]{1, 2, 3, 4, 5});
     image.downScale(50, 50);
   }
+
 }

@@ -1,25 +1,32 @@
 JAVA_HOME=$(shell readlink -f `which javac` | sed "s:/bin/javac::")
-CC=gcc
-CFLAGS=-g -c -fPIC -I$(JAVA_HOME)/include -I/usr/include -I$(JAVA_HOME)/include/linux -I./src/main/native -ljpeg
-LDFLAGS=-fPIC -shared -ljpeg
+JNI_CFLAGS=-I$(JAVA_HOME)/include -I/usr/include -I$(JAVA_HOME)/include/linux
+EPEG_CFLAGS=-g $(JNI_CFLAGS)  -I./src/main/native -ljpeg
+EPEG_LDFLAGS=-fPIC -shared -ljpeg
 
-SOURCES_DIR=src/main/native
-SHARED_LIB=target/classes/libjpegtran-jni.so
+EPEG_LIB=target/classes/libepeg-jni.so
+TURBOJPEG_LIB=target/classes/libturbojpeg-jni.so
 
-SOURCES=$(wildcard src/main/native/*.c)
-OBJECTS=$(SOURCES:.c=.o)
+EPEG_SOURCES=src/main/native/epeg-jni.c src/main/native/epeg/epeg_main.c
+EPEG_OBJECTS=$(EPEG_SOURCES:.c=.o)
 
-all: $(SOURCES) $(SHARED_LIB)
+all: $(EPEG_SOURCES) $(EPEG_LIB) $(TURBOJPEG_LIB)
 
-$(SHARED_LIB): $(OBJECTS)
-	mkdir -p target/classes/
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+$(TURBOJPEG_LIB):
+	mkdir -p build
+	cd build; JNI_CFLAGS="$(JNI_CFLAGS)" ../src/main/native/libjpeg-turbo/configure --with-java
+	make -C build
+	cp build/.libs/libturbojpeg.so.0.1.0 $(TURBOJPEG_LIB)
+	rm -rf build
 
-.c.o:
-	$(CC) $(CFLAGS) $< -o $@
+$(EPEG_LIB):
+	$(CC) $(EPEG_CFLAGS) $(EPEG_SOURCES) $(EPEG_LDFLAGS) -o $@
+
+%.o : %.c
+	$(CC) $(EPEG_CFLAGS) $< -o $@
 
 clean:
-	rm -rf $(SHARED_LIB) $(SOURCES_DIR)/*.o
+	rm -rf $(TURBOJPEG_LIB) $(EPEG_LIB) $(EPEG_OBJECTS)
 
 install:
-	install -m 0755 target/classes/libjpegtran-jni.so /usr/lib64
+	install -m 0755 target/classes/libepeg-jni.so /usr/lib64
+	install -m 0755 target/classes/libturbojpeg-jni.so /usr/lib64

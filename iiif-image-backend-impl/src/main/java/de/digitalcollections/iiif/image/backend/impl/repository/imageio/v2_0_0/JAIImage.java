@@ -49,48 +49,32 @@ public class JAIImage implements Image {
     ImageIO.setUseCache(true);
     // TODO directory
     // ImageIO.setCacheDirectory(null);
-    StopWatch sw = new StopWatch();
-    sw.start();
-    final ImageInputStream imageInputStream = ImageIO.createImageInputStream(imgData);
-    try {
+    ImageReader reader = null;
+    try (final ImageInputStream imageInputStream = ImageIO.createImageInputStream(imgData)) {
       Iterator<ImageReader> readers = ImageIO.getImageReaders(imageInputStream);
-      sw.stop();
-      LOGGER.debug("{} ms: getImageReaders()", sw.getLastTaskTimeMillis());
-
-      final ImageReader reader;
       if (readers.hasNext()) {
         reader = readers.next();
         this.formatString = reader.getFormatName();
       } else {
         throw new UnsupportedFormatException("Could not read image, unsupported format?");
       }
-//      imgData.reset();
-      try {
-//        reader.setInput(ImageIO.createImageInputStream(imgData), true, true);
-        reader.setInput(imageInputStream, true, true);
-        ImageReadParam params = reader.getDefaultReadParam();
-        if (region != null && region.isAbsolute()) {
-          int x = (int) Math.ceil(region.getHorizontalOffset());
-          int y = (int) Math.ceil(region.getVerticalOffset());
-          int width = (int) Math.ceil(region.getWidth());
-          int height = (int) Math.ceil(region.getHeight());
-          Rectangle rect = new Rectangle(x, y, width, height);
-          params.setSourceRegion(rect);
-        }
-
-        sw.start();
-        BufferedImage img = reader.read(0, params);
-        sw.stop();
-        LOGGER.debug("{} ms: created BufferedImage()", sw.getLastTaskTimeMillis());
-        this.image = img;
-      } finally {
-        // Dispose reader in finally block to avoid memory leaks
-        // see http://docs.oracle.com/javase/8/docs/api/javax/imageio/metadata/doc-files/jpeg_metadata.html
-        reader.dispose();
+      reader.setInput(imageInputStream, true, true);
+      ImageReadParam params = reader.getDefaultReadParam();
+      if (region != null && region.isAbsolute()) {
+        int x = (int) Math.ceil(region.getHorizontalOffset());
+        int y = (int) Math.ceil(region.getVerticalOffset());
+        int width = (int) Math.ceil(region.getWidth());
+        int height = (int) Math.ceil(region.getHeight());
+        Rectangle rect = new Rectangle(x, y, width, height);
+        params.setSourceRegion(rect);
       }
+      BufferedImage img = reader.read(0, params);
+      this.image = img;
     } finally {
       // Close stream in finally block to avoid resource leaks
-      imageInputStream.close();
+      if (reader != null) {
+        reader.dispose();
+      }
     }
   }
 
@@ -189,8 +173,7 @@ public class JAIImage implements Image {
       return this;
     }
     // TODO: make quality scalr method configurable
-    this.image = Scalr.
-            resize(image, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_EXACT, newWidth, newHeight);
+    this.image = Scalr.resize(image, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_EXACT, newWidth, newHeight);
     return this;
   }
 
@@ -255,5 +238,10 @@ public class JAIImage implements Image {
       this.formatString = targetFormat.name();
     }
     return this;
+  }
+
+  @Override
+  public void performTransformation() {
+    // This class is non-lazy, so this is a NOP
   }
 }
