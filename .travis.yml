@@ -1,6 +1,11 @@
 language: java
 jdk:
 - oraclejdk8
+addons:
+  apt:
+    packages:
+      - yasm
+
 before_script:
 - if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$TRAVIS_TAG; fi
 script:
