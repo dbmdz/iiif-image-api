@@ -16,8 +16,7 @@ import org.springframework.util.StringUtils;
  */
 @Configuration
 @ComponentScan(basePackages = {
-  "de.digitalcollections.iiif.image.backend.impl.repository",
-  "de.digitalcollections.iiif.image.backend.impl.resolver"
+  "de.digitalcollections.iiif.image.backend.impl.repository"
 })
 @PropertySource(value = {
   "classpath:de/digitalcollections/iiif/image/config/SpringConfigBackend-${spring.profiles.active:PROD}.properties"

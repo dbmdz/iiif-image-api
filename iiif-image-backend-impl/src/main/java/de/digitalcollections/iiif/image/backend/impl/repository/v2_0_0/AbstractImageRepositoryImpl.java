@@ -2,8 +2,12 @@ package de.digitalcollections.iiif.image.backend.impl.repository.v2_0_0;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import de.digitalcollections.core.business.api.ResourceService;
+import de.digitalcollections.core.model.api.resource.Resource;
+import de.digitalcollections.core.model.api.resource.enums.ResourcePersistenceType;
+import de.digitalcollections.core.model.api.resource.exceptions.ResourceIOException;
 import de.digitalcollections.iiif.image.backend.api.repository.v2_0_0.ImageRepository;
-import de.digitalcollections.iiif.image.backend.api.resolver.ImageResolver;
+import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
@@ -17,32 +21,27 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
 
 public abstract class AbstractImageRepositoryImpl implements ImageRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractImageRepositoryImpl.class);
-  @Autowired
-  private ApplicationContext applicationContext;
+
   private boolean forceJpeg;
 
   private final Cache<String, byte[]> httpCache;
-  private final Executor httpExecutor;
 
-  @Autowired(required = true)
-  List<ImageResolver> resolvers;
+  @Autowired
+  private ResourceService resourceService;
 
   public AbstractImageRepositoryImpl() {
-    httpExecutor = Executor.newInstance();
     httpCache = CacheBuilder.newBuilder().maximumSize(32).build();
   }
 
@@ -58,10 +57,6 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   }
 
   protected abstract Image createImage(String identifier, RegionParameters region) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException;
-
-  private String getCacheKey(String identifier) {
-    return String.format("iiif.imagedata.%s", identifier);
-  }
 
   @Override
   public Image getImage(String identifier, RegionParameters regionParameters) throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException {
@@ -81,85 +76,93 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   }
 
   protected byte[] getImageData(String identifier) throws ResolvingException {
-
-    byte[] imageData = null;
-
-    LOGGER.debug("Try to get image data for: " + identifier);
-
-    LOGGER.debug("START getImageData() for " + identifier);
-    ImageResolver resolver = getImageResolver(identifier);
-    URI imageUri = resolver.getURI(identifier);
+    Resource resource = getImageResource(identifier);
+    URI imageUri = resource.getUri();
     LOGGER.info("URI for {} is {}", identifier, imageUri.toString());
+    return getImageData(imageUri);
+  }
+
+  private Resource getImageResource(String identifier) throws ResolvingException {
+    Resource resource;
     try {
-      if (imageUri.getScheme().equals("file")) {
-        imageData = IOUtils.toByteArray(imageUri);
-      } else if (imageUri.getScheme().startsWith("http")) {
-        String cacheKey = getCacheKey(identifier);
+      String key = identifier + "_image";
+      resource = resourceService.get(key, ResourcePersistenceType.REFERENCED, null);
+    } catch (ResourceIOException ex) {
+      LOGGER.warn("Error getting manifest for identifier " + identifier);
+      throw new ResolvingException("No manifest for identifier " + identifier);
+    }
+    return resource;
+  }
+
+  private byte[] getImageData(URI imageUri) throws ResolvingException {
+    String location = imageUri.toString();
+    LOGGER.debug("Trying to get image data from: " + location);
+
+    try {
+      byte[] imageData;
+      String scheme = imageUri.getScheme();
+
+      // use caching for remote/http resources
+      if ("http".equals(scheme)) {
+        String cacheKey = location;
         imageData = httpCache.getIfPresent(cacheKey);
-        if (imageData == null) {
-          LOGGER.debug("HTTP Cache miss!");
-          imageData = httpExecutor.execute(Request.Get(imageUri)).returnContent().asBytes();
-          httpCache.put(cacheKey, imageData);
-        } else {
-          LOGGER.info("HTTP Cache hit!");
+        if (imageData != null) {
+          LOGGER.debug("HTTP Cache hit for image data " + cacheKey);
+          return imageData;
         }
-      } else if (imageUri.getScheme().equals("classpath")) {
-        Resource resource = applicationContext.getResource(imageUri.toString());
-        InputStream is = resource.getInputStream();
-        imageData = IOUtils.toByteArray(is);
       }
-    } catch (IOException e) {
-      LOGGER.warn("Could not read from {}", imageUri.toString());
-      throw new ResolvingException(e);
-    }
-    LOGGER.debug("DONE getImageData() for " + identifier);
 
-    if (imageData == null || imageData.length == 0) {
-      throw new ResolvingException("No image data for identifier: " + identifier);
-    }
+      InputStream inputStream = resourceService.getInputStream(imageUri);
+      imageData = IOUtils.toByteArray(inputStream);
 
-    if (forceJpeg) {
-      try {
-        imageData = convertToJpeg(imageData);
-      } catch (IOException e) {
-        LOGGER.error("JPEG conversion failed", e);
-        throw new ResolvingException("Error converting " + identifier + "to JPEG.");
+      if ("http".equals(scheme)) {
+        String cacheKey = location;
+        httpCache.put(cacheKey, imageData);
       }
-    }
 
-    return imageData;
+      if (imageData == null || imageData.length == 0) {
+        throw new ResolvingException("No image data at location " + location);
+      }
+
+      if (forceJpeg) {
+        try {
+          imageData = convertToJpeg(imageData);
+        } catch (IOException e) {
+          LOGGER.error("JPEG conversion failed", e);
+          throw new ResolvingException("Error converting image from location " + location + "to JPEG.");
+        }
+      }
+
+      return imageData;
+    } catch (IOException ex) {
+      LOGGER.warn("Error getting image data from location " + location);
+      throw new ResolvingException("No image data for location " + location);
+    }
   }
 
   @Override
   public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException {
+    ImageInfo imageInfo = null;
     try {
-      // FIXME do not get whole image just for image infos... use imageio reader:
-      // see getImageDimension in DzpIiifPresentationRepositoryImpl
-      Image image = getImage(identifier, null);
-      if (image != null) {
-        ImageInfo imageInfo = new ImageInfoImpl();
-        imageInfo.setFormat(image.getFormat());
-        imageInfo.setHeight(image.getHeight());
-        imageInfo.setWidth(image.getWidth());
-        return imageInfo;
-      }
-    } catch (InvalidParametersException ipe) {
-      // as region == null params can not be invalid
-    }
-    return null;
-  }
+      Resource imageResource = getImageResource(identifier);
 
-  private ImageResolver getImageResolver(String identifier) throws ResolvingException {
-    for (ImageResolver resolver : resolvers) {
-      if (resolver.isResolvable(identifier)) {
-        String msg = identifier + " resolved with this resolver: " + resolver.getClass().
-                getSimpleName();
-        LOGGER.debug(msg);
-        return resolver;
+      try (ImageInputStream in = ImageIO.createImageInputStream(resourceService.getInputStream(imageResource))) {
+        final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+        if (readers.hasNext()) {
+          ImageReader reader = readers.next();
+          reader.setInput(in);
+          imageInfo = new ImageInfoImpl();
+          final String formatName = reader.getFormatName();
+          imageInfo.setFormat(ImageFormat.getByExtension(formatName));
+          imageInfo.setHeight(reader.getHeight(0));
+          imageInfo.setWidth(reader.getWidth(0));
+          reader.dispose();
+        }
       }
+    } catch (IOException | ResolvingException ex) {
+      throw new RuntimeException("Could not get image info for image with identifier " + identifier, ex);
     }
-    String msg = "No resolver found for identifier '" + identifier + "'";
-    throw new ResolvingException(msg);
+    return imageInfo;
   }
 
   public boolean isForceJpeg() {

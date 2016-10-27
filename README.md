@@ -113,7 +113,7 @@ public class WebappInitializer extends AbstractAnnotationConfigDispatcherServlet
 }
 ```
 
-- Implement project specific Resolvers for accessing images. Place them into package "de.digitalcollections.iiif.image.backend.impl.resolver" or a subpackage and implement interface "de.digitalcollections.iiif.image.backend.api.resolver.ImageResolver" or use/extend provided implementations from "de.digitalcollections.iiif.image.backend.impl.resolver" (PatternImageResolver). They will be found automatically by ComponentScan.
+- Implement project specific Resolvers for accessing images. Place them into package "de.digitalcollections.core.backend.impl.file.repository.resource.resolver" or a subpackage and implement interface "de.digitalcollections.core.backend.impl.file.repository.resource.resolver.FileNameResolver". They will be found automatically by ComponentScan.
 
 - Start your Spring MVC webapp. You should see mappings for IIIF-Image-API-URLs in your log:
 

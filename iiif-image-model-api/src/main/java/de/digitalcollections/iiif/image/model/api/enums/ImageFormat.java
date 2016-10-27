@@ -15,7 +15,7 @@ public enum ImageFormat {
     for (ImageFormat imageFormat : values) {
       final String[] formatExtensions = imageFormat.getExtensions();
       for (String formatExtension : formatExtensions) {
-        if (formatExtension.equals(extension)) {
+        if (formatExtension.equalsIgnoreCase(extension)) {
           return imageFormat;
         }
       }
