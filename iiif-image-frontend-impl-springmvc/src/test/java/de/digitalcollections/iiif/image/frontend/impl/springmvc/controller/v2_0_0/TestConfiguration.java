@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {
+  "de.digitalcollections.core.config",
   "de.digitalcollections.iiif.image.config",
   "de.digitalcollections.iiif.image.backend.impl.repository",
   "de.digitalcollections.iiif.image.backend.impl.resolver"

@@ -85,8 +85,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   private Resource getImageResource(String identifier) throws ResolvingException {
     Resource resource;
     try {
-      String key = identifier + "_image";
-      resource = resourceService.get(key, ResourcePersistenceType.REFERENCED, null);
+      resource = resourceService.get(identifier, ResourcePersistenceType.REFERENCED, null);
     } catch (ResourceIOException ex) {
       LOGGER.warn("Error getting manifest for identifier " + identifier);
       throw new ResolvingException("No manifest for identifier " + identifier);
