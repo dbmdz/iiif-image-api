@@ -116,14 +116,6 @@
                 <phase>process-classes</phase>
                 <configuration>
                   <target name="jni">
-                    <exec executable="javah" >
-                      <arg value="-d" />
-                      <arg value="${project.basedir}/src/main/native" />
-                      <arg value="-classpath" />
-                      <arg value="${project.build.outputDirectory}" />
-                      <arg value="-force" />
-                      <arg value="de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.Transformation" />
-                    </exec>
                     <exec executable="make"/>
                   </target>
                 </configuration>
