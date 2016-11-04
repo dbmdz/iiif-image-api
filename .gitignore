@@ -28,5 +28,5 @@ hs_err_pid*
 **/pom.xml.versionsBackup
 .idea
 *.iml
-core
+iiif-image-backend-impl/core
 .deps
