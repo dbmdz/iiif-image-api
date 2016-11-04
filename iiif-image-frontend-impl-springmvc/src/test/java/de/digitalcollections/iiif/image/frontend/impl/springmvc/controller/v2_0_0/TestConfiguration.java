@@ -1,4 +1,4 @@
-package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller;
+package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2_0_0;
 
 import de.digitalcollections.iiif.image.backend.impl.cache.BufferedImageCache;
 import de.digitalcollections.iiif.image.backend.impl.cache.PersistenceException;
@@ -19,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
   "de.digitalcollections.core.config",
   "de.digitalcollections.iiif.image.config",
   "de.digitalcollections.iiif.image.backend.impl.repository",
-  "de.digitalcollections.iiif.image.backend.impl.resolver"
 }, excludeFilters = {
   @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SpringConfigBackendImage.class)
 })

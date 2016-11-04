@@ -3,7 +3,6 @@ package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2_0
 import com.twelvemonkeys.imageio.stream.ByteArrayImageInputStream;
 import de.digitalcollections.iiif.image.backend.impl.repository.imageio.v2_0_0.JAIImage;
 import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0.JpegTranImage;
-import de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.TestConfiguration;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.v2_0_0.Image;
 import java.awt.image.BufferedImage;
@@ -17,6 +16,7 @@ import javax.imageio.stream.ImageInputStream;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +45,16 @@ public class IIIFImageApiControllerTest {
   @SuppressWarnings("SpringJavaAutowiringInspection")
   @Autowired
   protected WebApplicationContext wac;
+
+  @BeforeClass
+  public static void beforeClass() {
+    System.setProperty("spring.profiles.active", "TEST");
+  }
+
+  @Before
+  public void setup() {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+  }
 
   @Test
   public void getFedoraInfo() throws Exception {
@@ -104,10 +114,6 @@ public class IIIFImageApiControllerTest {
     }
   }
 
-  @Before
-  public void setup() {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-  }
 
   @Test
   public void testBinarization() throws Exception {
