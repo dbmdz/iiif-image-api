@@ -30,3 +30,5 @@ hs_err_pid*
 *.iml
 iiif-image-backend-impl/core
 .deps
+/iiif-image-backend-impl/src/main/native/libjpeg-turbo/autom4te.cache/
+/iiif-image-backend-impl/src/main/native/libjpeg-turbo/config.h.in~
