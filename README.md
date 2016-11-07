@@ -127,6 +127,14 @@ public class WebappInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 ### Local build
 
+Requirements for building included libturbojpeg library support:
+
+- Install autoconf, libtool and nasm packages:
+
+```shell
+$ sudo apt-get install autoconf libtool nasm
+```
+
 Clone project and build it:
 
 ```shell
