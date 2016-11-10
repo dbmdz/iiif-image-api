@@ -68,6 +68,7 @@
     <version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
     <version.nexus-staging-maven-plugin>1.6.7</version.nexus-staging-maven-plugin>
     <version.slf4j>1.7.13</version.slf4j>
+    <version.snakeyaml>1.17</version.snakeyaml>
     <version.spring-framework>4.2.5.RELEASE</version.spring-framework>
     <version.twelvemonkeys-imageio>3.2.1</version.twelvemonkeys-imageio>
     <version.twelvemonkeys-servlet>3.2.1</version.twelvemonkeys-servlet>
@@ -340,6 +341,11 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${version.spring-framework}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>${version.snakeyaml}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
