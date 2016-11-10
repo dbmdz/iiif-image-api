@@ -38,12 +38,22 @@
     </dependency>
     <dependency>
       <groupId>de.digitalcollections</groupId>
+      <artifactId>digitalcollections-core-backend-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>de.digitalcollections</groupId>
       <artifactId>iiif-image-backend-impl</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>de.digitalcollections</groupId>
       <artifactId>iiif-image-business-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.digitalcollections</groupId>
+      <artifactId>digitalcollections-core-business-api</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>de.digitalcollections</groupId>
