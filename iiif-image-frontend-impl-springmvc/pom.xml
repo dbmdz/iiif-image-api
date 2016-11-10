@@ -33,6 +33,11 @@
     </dependency>
     <dependency>
       <groupId>de.digitalcollections</groupId>
+      <artifactId>digitalcollections-core-model-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>de.digitalcollections</groupId>
       <artifactId>iiif-image-backend-impl</artifactId>
       <scope>test</scope>
     </dependency>
