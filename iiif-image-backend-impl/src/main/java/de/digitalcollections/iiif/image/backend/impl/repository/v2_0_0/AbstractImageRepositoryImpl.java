@@ -3,6 +3,7 @@ package de.digitalcollections.iiif.image.backend.impl.repository.v2_0_0;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import de.digitalcollections.core.business.api.ResourceService;
+import de.digitalcollections.core.model.api.MimeType;
 import de.digitalcollections.core.model.api.resource.Resource;
 import de.digitalcollections.core.model.api.resource.enums.ResourcePersistenceType;
 import de.digitalcollections.core.model.api.resource.exceptions.ResourceIOException;
@@ -85,7 +86,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   private Resource getImageResource(String identifier) throws ResolvingException {
     Resource resource;
     try {
-      resource = resourceService.get(identifier, ResourcePersistenceType.REFERENCED, null);
+      resource = resourceService.get(identifier, ResourcePersistenceType.REFERENCED,  MimeType.MIME_IMAGE);
     } catch (ResourceIOException ex) {
       LOGGER.warn("Error getting manifest for identifier " + identifier);
       throw new ResolvingException("No manifest for identifier " + identifier);

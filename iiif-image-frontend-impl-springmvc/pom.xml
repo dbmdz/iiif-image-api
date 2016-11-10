@@ -8,7 +8,6 @@
     <version>0-SNAPSHOT</version>
   </parent>
   
-  <groupId>de.digitalcollections</groupId>
   <artifactId>iiif-image-frontend-impl-springmvc</artifactId>
   <packaging>jar</packaging>
   <name>DigitalCollections: IIIF Image API Library (Frontend IMPL Spring MVC)</name>

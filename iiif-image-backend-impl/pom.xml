@@ -36,6 +36,10 @@
     </dependency>
     <dependency>
       <groupId>de.digitalcollections</groupId>
+      <artifactId>digitalcollections-core-model-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.digitalcollections</groupId>
       <artifactId>digitalcollections-core-business-api</artifactId>
     </dependency>
     <dependency>

@@ -51,7 +51,7 @@
     
     <version.commons-io>2.5</version.commons-io>
     <version.commons-lang3>3.4</version.commons-lang3>
-    <version.digitalcollections-core>1.1.0</version.digitalcollections-core>
+    <version.digitalcollections-core>0-SNAPSHOT</version.digitalcollections-core>
     <version.fluent-hc>4.3.4</version.fluent-hc>
     <version.guava>18.0</version.guava>
     <version.hamcrest-library>1.3</version.hamcrest-library>
@@ -230,6 +230,11 @@
         <artifactId>digitalcollections-core-business-impl</artifactId>
         <version>${version.digitalcollections-core}</version>
         <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>de.digitalcollections</groupId>
+        <artifactId>digitalcollections-core-model-api</artifactId>
+        <version>${version.digitalcollections-core}</version>
       </dependency>
       <dependency>
         <groupId>de.digitalcollections</groupId>
