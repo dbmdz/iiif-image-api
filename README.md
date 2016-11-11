@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/dbmdz/iiif-image-api/branch/master/graph/badge.svg)](https://codecov.io/gh/dbmdz/iiif-image-api)
 [![Maven Central](https://img.shields.io/maven-central/v/de.digitalcollections/iiif-image-api.svg?maxAge=2592000)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22iiif-image-api%22)
 
-These Java libraries implement the IIIF Image API 2.0.0 (see <a href="http://iiif.io/api/image/2.0/">http://iiif.io/api/image/2.0/</a>):
+These Java libraries implement the IIIF Image API (see <a href="http://iiif.io/api/image/2.0/">http://iiif.io/api/image/2.0/</a>):
 
 "The IIIF Image API specifies a web service that returns an image in response to a standard HTTP or HTTPS request. The URI can specify the region, size, rotation, quality characteristics and format of the requested image. A URI can also be constructed to request basic technical information about the image to support client applications. This API was conceived of to facilitate systematic reuse of image resources in digital image repositories maintained by cultural heritage organizations. It could be adopted by any image repository or service, and can be used to retrieve static images in response to a properly constructed URI."
 
@@ -80,7 +80,7 @@ Depending on what library you want use, these are the dependency definitions for
 <dependency>
   <groupId>de.digitalcollections</groupId>
   <artifactId>iiif-image-frontend-impl-springmvc</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.2</version>
 </dependency>
 ```
 
@@ -119,9 +119,9 @@ public class WebappInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 ```
 ...
-[2016-07-13 15:41:29,868 INFO ] [...] RequestMappingHandlerMapping (main    ) > Mapped "{[/iiif/image/2.0.0/{identifier}/info.json],methods=[GET]}" onto public org.springframework.http.ResponseEntity<java.lang.String> de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2_0_0.IIIFImageApiController.getInfo(java.lang.String,javax.servlet.http.HttpServletRequest) throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException,java.lang.UnsupportedOperationException,java.io.IOException
-[2016-07-13 15:41:29,868 INFO ] [...] RequestMappingHandlerMapping (main    ) > Mapped "{[/iiif/image/2.0.0/{identifier}],methods=[GET]}" onto public java.lang.String de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2_0_0.IIIFImageApiController.getInfoRedirect(java.lang.String)
-[2016-07-13 15:41:29,868 INFO ] [...] RequestMappingHandlerMapping (main    ) > Mapped "{[/iiif/image/2.0.0/{identifier}/{region}/{size}/{rotation}/{quality}.{format}]}" onto public org.springframework.http.ResponseEntity<byte[]> de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2_0_0.IIIFImageApiController.getImageRepresentation(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,javax.servlet.http.HttpServletRequest) throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException,java.lang.UnsupportedOperationException,java.io.IOException,java.net.URISyntaxException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException
+[2016-07-13 15:41:29,868 INFO ] [...] RequestMappingHandlerMapping (main    ) > Mapped "{[/image/v2/{identifier}/info.json],methods=[GET]}" onto public org.springframework.http.ResponseEntity<java.lang.String> de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2.IIIFImageApiController.getInfo(java.lang.String,javax.servlet.http.HttpServletRequest) throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException,java.lang.UnsupportedOperationException,java.io.IOException
+[2016-07-13 15:41:29,868 INFO ] [...] RequestMappingHandlerMapping (main    ) > Mapped "{[/image/v2/{identifier}],methods=[GET]}" onto public java.lang.String de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2.IIIFImageApiController.getInfoRedirect(java.lang.String)
+[2016-07-13 15:41:29,868 INFO ] [...] RequestMappingHandlerMapping (main    ) > Mapped "{[/image/v2/{identifier}/{region}/{size}/{rotation}/{quality}.{format}]}" onto public org.springframework.http.ResponseEntity<byte[]> de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2.IIIFImageApiController.getImageRepresentation(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,javax.servlet.http.HttpServletRequest) throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException,java.lang.UnsupportedOperationException,java.io.IOException,java.net.URISyntaxException,de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException
 ...
 ```
 

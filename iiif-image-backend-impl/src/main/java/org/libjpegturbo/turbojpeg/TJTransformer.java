@@ -31,7 +31,7 @@ package org.libjpegturbo.turbojpeg;
 
 import java.io.IOException;
 
-import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0.LibraryLoader;
+import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2.LibraryLoader;
 
 /**
  * TurboJPEG lossless transformer

@@ -1,15 +1,13 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.jpegtran;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0.JpegImage;
 import de.digitalcollections.iiif.image.JniTest;
+import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2.JpegImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
-import org.assertj.core.data.Percentage;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

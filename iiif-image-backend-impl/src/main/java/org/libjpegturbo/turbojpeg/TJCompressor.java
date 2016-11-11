@@ -33,7 +33,7 @@ import java.awt.image.*;
 import java.nio.*;
 import java.io.*;
 
-import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2_0_0.LibraryLoader;
+import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2.LibraryLoader;
 
 /**
  * TurboJPEG compressor
