@@ -9,10 +9,11 @@ import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2.ScaleParameters;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,35 +67,54 @@ public class ImageRepositoryImageIoImpl extends AbstractImageRepositoryImpl {
   }
 
   @Override
-  public Set<ImageFormat> getSupportedInputFormats() {
-    Set<ImageFormat> formats = new HashSet<>();
-    for (String supportedFormat : ImageIO.getReaderFormatNames()) {
-      try {
-        formats.add(JAIImage.getFormatFromString(supportedFormat));
-      } catch (UnsupportedFormatException ignored) {
-      }
-    }
-    return formats;
+  public boolean supportsInputFormat(ImageFormat inFormat) {
+    return Stream.of(ImageIO.getReaderFormatNames())
+        .filter(name -> {
+          try {
+            return JAIImage.getFormatFromString(name).equals(inFormat);
+          } catch (UnsupportedFormatException e) {
+            return false;
+          }
+        })
+        .findFirst()
+        .isPresent();
   }
 
   @Override
-  public Set<ImageFormat> getSupportedOutputFormats() {
-    Set<ImageFormat> formats = new HashSet<>();
-    for (String supportedFormat : ImageIO.getWriterFormatNames()) {
-      try {
-        formats.add(JAIImage.getFormatFromString(supportedFormat));
-      } catch (UnsupportedFormatException ignored) {
-      }
-    }
-    return formats;
+  public boolean supportsOutputFormat(ImageFormat outFormat) {
+    return Stream.of(ImageIO.getWriterFormatNames())
+        .filter(name -> {
+          try {
+            return JAIImage.getFormatFromString(name).equals(outFormat);
+          } catch (UnsupportedFormatException e) {
+            return false;
+          }
+        })
+        .findFirst()
+        .isPresent();
   }
 
   @Override
-  public Set<ImageBitDepth> getSupportedBitDepths() {
-    HashSet<ImageBitDepth> supported = new HashSet<>();
-    supported.add(ImageBitDepth.BITONAL);
-    supported.add(ImageBitDepth.GRAYSCALE);
-    supported.add(ImageBitDepth.COLOR);
-    return supported;
+  public boolean supportsCropOperation(RegionParameters region) {
+    // No limitations on cropping
+    return true;
+  }
+
+  @Override
+  public boolean supportsScaleOperation(Dimension imageDims, ScaleParameters scaleParams) {
+    // No limitations on scaling
+    return true;
+  }
+
+  @Override
+  public boolean supportsBitDepth(ImageBitDepth bitDepth) {
+    switch (bitDepth) {
+      case BITONAL:
+      case GRAYSCALE:
+      case COLOR:
+        return true;
+      default:
+        return false;
+    }
   }
 }

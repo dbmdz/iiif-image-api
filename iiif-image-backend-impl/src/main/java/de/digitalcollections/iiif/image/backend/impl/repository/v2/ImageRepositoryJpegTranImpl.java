@@ -8,9 +8,9 @@ import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2.ScaleParameters;
+import java.awt.*;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -33,26 +33,38 @@ public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl imp
   }
 
   @Override
-  public Set<ImageFormat> getSupportedInputFormats() {
-    Set<ImageFormat> formats = new HashSet<>();
-    formats.add(ImageFormat.JPEG);
-    return formats;
-  }
-
-  @Override
-  public Set<ImageFormat> getSupportedOutputFormats() {
-    Set<ImageFormat> formats = new HashSet<>();
-    formats.add(ImageFormat.JPEG);
-    return formats;
-  }
-
-  @Override
-  public Set<ImageBitDepth> getSupportedBitDepths() {
-    return new HashSet<>();
-  }
-
-  @Override
   public int getOrder() {
     return Ordered.HIGHEST_PRECEDENCE;
+  }
+
+  @Override
+  public boolean supportsInputFormat(ImageFormat inFormat) {
+    return inFormat.equals(ImageFormat.JPEG);
+  }
+
+  @Override
+  public boolean supportsOutputFormat(ImageFormat outFormat) {
+    return outFormat.equals(ImageFormat.JPEG);
+  }
+
+  @Override
+  public boolean supportsCropOperation(RegionParameters region) {
+    return (
+        region.getWidth() % 8 == 0
+        && region.getHeight() % 8 == 0
+        && region.getHorizontalOffset() % 8 == 0
+        && region.getVerticalOffset() % 8 == 0);
+  }
+
+  @Override
+  public boolean supportsScaleOperation(Dimension imageDims, ScaleParameters scaleParams) {
+    return (scaleParams.getTargetHeight() < imageDims.getHeight()
+            && scaleParams.getTargetWidth() < imageDims.getWidth());
+  }
+
+  @Override
+  public boolean supportsBitDepth(ImageBitDepth bitDepth) {
+    return (bitDepth.equals(ImageBitDepth.GRAYSCALE)
+            || bitDepth.equals(ImageBitDepth.COLOR));
   }
 }

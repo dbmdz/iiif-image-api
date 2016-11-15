@@ -17,9 +17,13 @@ public interface ImageRepository {
   public Image getImage(String identifier, RegionParameters regionParameters)
           throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException;
 
-  public Set<ImageFormat> getSupportedInputFormats();
+  public boolean supportsInputFormat(ImageFormat inFormat);
 
-  public Set<ImageFormat> getSupportedOutputFormats();
+  public boolean supportsOutputFormat(ImageFormat outFormat);
 
-  public Set<ImageBitDepth> getSupportedBitDepths();
+  public boolean supportsCropOperation(RegionParameters region);
+
+  public boolean supportsScaleOperation(Dimension imageDims, ScaleParameters scaleParams);
+
+  public boolean supportsBitDepth(ImageBitDepth bitDepth);
 }

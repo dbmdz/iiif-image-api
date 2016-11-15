@@ -53,9 +53,9 @@ public class ImageServiceImpl implements ImageService {
   private Image getImage(String identifier, RegionParameters regionParameters, ImageFormat outputFormat, ImageBitDepth bitDepthParameter)
           throws UnsupportedFormatException, InvalidParametersException, UnsupportedOperationException {
     for (ImageRepository repo : this.imageRepositories) {
-      if (!repo.getSupportedOutputFormats().contains(outputFormat)
-              || (bitDepthParameter != null && !repo.getSupportedBitDepths().
-              contains(bitDepthParameter))) {
+      if (!repo.supportsCropOperation(regionParameters)
+          || !repo.supportsOutputFormat(outputFormat)
+          || !repo.supportsBitDepth(bitDepthParameter)) {
         continue;
       }
       try {
