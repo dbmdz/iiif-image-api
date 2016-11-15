@@ -10,7 +10,7 @@ import org.apache.commons.lang3.time.StopWatch;
 public class EpegScaler {
   static {
     try {
-      LibraryLoader.loadLibrary("epeg-jni");
+      LibraryLoader.loadLibrary("turbojpeg-jni");
     } catch (IOException e) {
       throw new RuntimeException();
     }

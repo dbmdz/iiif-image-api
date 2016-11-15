@@ -18,7 +18,7 @@ endif
 
 HDRS = jchuff.h jdct.h jdhuff.h jerror.h jinclude.h jmemsys.h jmorecfg.h \
 	jpegint.h jpeglib.h jversion.h jsimd.h jsimddct.h jpegcomp.h \
-	jpeg_nbits_table.h
+	jpeg_nbits_table.h Epeg.h epeg_private.h
 
 libjpeg_la_SOURCES = $(HDRS) jcapimin.c jcapistd.c jccoefct.c jccolor.c \
 	jcdctmgr.c jchuff.c jcinit.c jcmainct.c jcmarker.c jcmaster.c \
@@ -27,7 +27,8 @@ libjpeg_la_SOURCES = $(HDRS) jcapimin.c jcapistd.c jccoefct.c jccolor.c \
 	jddctmgr.c jdhuff.c jdinput.c jdmainct.c jdmarker.c jdmaster.c \
 	jdmerge.c jdphuff.c jdpostct.c jdsample.c jdtrans.c jerror.c \
 	jfdctflt.c jfdctfst.c jfdctint.c jidctflt.c jidctfst.c jidctint.c \
-	jidctred.c jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c
+	jidctred.c jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c \
+	epeg_main.c
 
 if WITH_ARITH
 libjpeg_la_SOURCES += jaricom.c
@@ -52,7 +53,7 @@ libturbojpeg_la_SOURCES = $(libjpeg_la_SOURCES) turbojpeg.c turbojpeg.h \
 
 if WITH_JAVA
 
-libturbojpeg_la_SOURCES += turbojpeg-jni.c
+libturbojpeg_la_SOURCES += turbojpeg-jni.c epeg-jni.c
 libturbojpeg_la_CFLAGS = ${JNI_CFLAGS}
 TJMAPFILE = turbojpeg-mapfile.jni
 

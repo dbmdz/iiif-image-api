@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #include "jni.h"
-#include "epeg/Epeg.h"
+#include "Epeg.h"
 
 /*
  * Class:     de_digitalcollections_iiif_image_backend_impl_repository_jpegtran_v2_EpegScaler

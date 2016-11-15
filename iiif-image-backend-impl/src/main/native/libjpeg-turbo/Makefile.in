@@ -97,7 +97,7 @@ host_triplet = @host@
 @WITH_ARITH_TRUE@am__append_4 = jaricom.c
 @WITH_ARITH_ENC_TRUE@am__append_5 = jcarith.c
 @WITH_ARITH_DEC_TRUE@am__append_6 = jdarith.c
-@WITH_JAVA_TRUE@@WITH_TURBOJPEG_TRUE@am__append_7 = turbojpeg-jni.c
+@WITH_JAVA_TRUE@@WITH_TURBOJPEG_TRUE@am__append_7 = turbojpeg-jni.c epeg-jni.c
 @VERSION_SCRIPT_TRUE@@WITH_TURBOJPEG_TRUE@am__append_8 = $(VERSION_SCRIPT_FLAG)$(srcdir)/$(TJMAPFILE)
 @VERSION_SCRIPT_TRUE@am__append_9 = $(VERSION_SCRIPT_FLAG)libjpeg.map
 @WITH_SIMD_TRUE@am__append_10 = simd
@@ -165,16 +165,17 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 @WITH_SIMD_TRUE@libjpeg_la_DEPENDENCIES = simd/libsimd.la
 am__libjpeg_la_SOURCES_DIST = jchuff.h jdct.h jdhuff.h jerror.h \
 	jinclude.h jmemsys.h jmorecfg.h jpegint.h jpeglib.h jversion.h \
-	jsimd.h jsimddct.h jpegcomp.h jpeg_nbits_table.h jcapimin.c \
-	jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c jcinit.c \
-	jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c jcphuff.c \
-	jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c \
-	jdatadst.c jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c \
-	jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c \
-	jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c \
-	jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c \
-	jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c jaricom.c \
-	jcarith.c jdarith.c jsimd_none.c
+	jsimd.h jsimddct.h jpegcomp.h jpeg_nbits_table.h Epeg.h \
+	epeg_private.h jcapimin.c jcapistd.c jccoefct.c jccolor.c \
+	jcdctmgr.c jchuff.c jcinit.c jcmainct.c jcmarker.c jcmaster.c \
+	jcomapi.c jcparam.c jcphuff.c jcprepct.c jcsample.c jctrans.c \
+	jdapimin.c jdapistd.c jdatadst.c jdatasrc.c jdcoefct.c \
+	jdcolor.c jddctmgr.c jdhuff.c jdinput.c jdmainct.c jdmarker.c \
+	jdmaster.c jdmerge.c jdphuff.c jdpostct.c jdsample.c jdtrans.c \
+	jerror.c jfdctflt.c jfdctfst.c jfdctint.c jidctflt.c \
+	jidctfst.c jidctint.c jidctred.c jquant1.c jquant2.c jutils.c \
+	jmemmgr.c jmemnobs.c epeg_main.c jaricom.c jcarith.c jdarith.c \
+	jsimd_none.c
 am__objects_1 =
 @WITH_ARITH_TRUE@am__objects_2 = jaricom.lo
 @WITH_ARITH_ENC_TRUE@am__objects_3 = jcarith.lo
@@ -189,8 +190,9 @@ am_libjpeg_la_OBJECTS = $(am__objects_1) jcapimin.lo jcapistd.lo \
 	jdmaster.lo jdmerge.lo jdphuff.lo jdpostct.lo jdsample.lo \
 	jdtrans.lo jerror.lo jfdctflt.lo jfdctfst.lo jfdctint.lo \
 	jidctflt.lo jidctfst.lo jidctint.lo jidctred.lo jquant1.lo \
-	jquant2.lo jutils.lo jmemmgr.lo jmemnobs.lo $(am__objects_2) \
-	$(am__objects_3) $(am__objects_4) $(am__objects_5)
+	jquant2.lo jutils.lo jmemmgr.lo jmemnobs.lo epeg_main.lo \
+	$(am__objects_2) $(am__objects_3) $(am__objects_4) \
+	$(am__objects_5)
 libjpeg_la_OBJECTS = $(am_libjpeg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -202,18 +204,19 @@ libjpeg_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 @WITH_SIMD_TRUE@libturbojpeg_la_DEPENDENCIES = simd/libsimd.la
 am__libturbojpeg_la_SOURCES_DIST = jchuff.h jdct.h jdhuff.h jerror.h \
 	jinclude.h jmemsys.h jmorecfg.h jpegint.h jpeglib.h jversion.h \
-	jsimd.h jsimddct.h jpegcomp.h jpeg_nbits_table.h jcapimin.c \
-	jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c jcinit.c \
-	jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c jcphuff.c \
-	jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c \
-	jdatadst.c jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c \
-	jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c \
-	jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c \
-	jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c \
-	jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c jaricom.c \
-	jcarith.c jdarith.c jsimd_none.c turbojpeg.c turbojpeg.h \
-	transupp.c transupp.h jdatadst-tj.c jdatasrc-tj.c \
-	turbojpeg-jni.c turbojpeg-mapfile turbojpeg-mapfile.jni
+	jsimd.h jsimddct.h jpegcomp.h jpeg_nbits_table.h Epeg.h \
+	epeg_private.h jcapimin.c jcapistd.c jccoefct.c jccolor.c \
+	jcdctmgr.c jchuff.c jcinit.c jcmainct.c jcmarker.c jcmaster.c \
+	jcomapi.c jcparam.c jcphuff.c jcprepct.c jcsample.c jctrans.c \
+	jdapimin.c jdapistd.c jdatadst.c jdatasrc.c jdcoefct.c \
+	jdcolor.c jddctmgr.c jdhuff.c jdinput.c jdmainct.c jdmarker.c \
+	jdmaster.c jdmerge.c jdphuff.c jdpostct.c jdsample.c jdtrans.c \
+	jerror.c jfdctflt.c jfdctfst.c jfdctint.c jidctflt.c \
+	jidctfst.c jidctint.c jidctred.c jquant1.c jquant2.c jutils.c \
+	jmemmgr.c jmemnobs.c epeg_main.c jaricom.c jcarith.c jdarith.c \
+	jsimd_none.c turbojpeg.c turbojpeg.h transupp.c transupp.h \
+	jdatadst-tj.c jdatasrc-tj.c turbojpeg-jni.c epeg-jni.c \
+	turbojpeg-mapfile turbojpeg-mapfile.jni
 @WITH_ARITH_TRUE@am__objects_6 = libturbojpeg_la-jaricom.lo
 @WITH_ARITH_ENC_TRUE@am__objects_7 = libturbojpeg_la-jcarith.lo
 @WITH_ARITH_DEC_TRUE@am__objects_8 = libturbojpeg_la-jdarith.lo
@@ -241,9 +244,11 @@ am__objects_10 = $(am__objects_1) libturbojpeg_la-jcapimin.lo \
 	libturbojpeg_la-jidctint.lo libturbojpeg_la-jidctred.lo \
 	libturbojpeg_la-jquant1.lo libturbojpeg_la-jquant2.lo \
 	libturbojpeg_la-jutils.lo libturbojpeg_la-jmemmgr.lo \
-	libturbojpeg_la-jmemnobs.lo $(am__objects_6) $(am__objects_7) \
-	$(am__objects_8) $(am__objects_9)
-@WITH_JAVA_TRUE@@WITH_TURBOJPEG_TRUE@am__objects_11 = libturbojpeg_la-turbojpeg-jni.lo
+	libturbojpeg_la-jmemnobs.lo libturbojpeg_la-epeg_main.lo \
+	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
+	$(am__objects_9)
+@WITH_JAVA_TRUE@@WITH_TURBOJPEG_TRUE@am__objects_11 = libturbojpeg_la-turbojpeg-jni.lo \
+@WITH_JAVA_TRUE@@WITH_TURBOJPEG_TRUE@	libturbojpeg_la-epeg-jni.lo
 @WITH_TURBOJPEG_TRUE@am_libturbojpeg_la_OBJECTS = $(am__objects_10) \
 @WITH_TURBOJPEG_TRUE@	libturbojpeg_la-turbojpeg.lo \
 @WITH_TURBOJPEG_TRUE@	libturbojpeg_la-transupp.lo \
@@ -620,7 +625,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = pkgscripts/libjpeg.pc $(am__append_3)
 HDRS = jchuff.h jdct.h jdhuff.h jerror.h jinclude.h jmemsys.h jmorecfg.h \
 	jpegint.h jpeglib.h jversion.h jsimd.h jsimddct.h jpegcomp.h \
-	jpeg_nbits_table.h
+	jpeg_nbits_table.h Epeg.h epeg_private.h
 
 libjpeg_la_SOURCES = $(HDRS) jcapimin.c jcapistd.c jccoefct.c \
 	jccolor.c jcdctmgr.c jchuff.c jcinit.c jcmainct.c jcmarker.c \
@@ -630,8 +635,9 @@ libjpeg_la_SOURCES = $(HDRS) jcapimin.c jcapistd.c jccoefct.c \
 	jdmarker.c jdmaster.c jdmerge.c jdphuff.c jdpostct.c \
 	jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c jfdctint.c \
 	jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
-	jquant2.c jutils.c jmemmgr.c jmemnobs.c $(am__append_4) \
-	$(am__append_5) $(am__append_6) $(am__append_11)
+	jquant2.c jutils.c jmemmgr.c jmemnobs.c epeg_main.c \
+	$(am__append_4) $(am__append_5) $(am__append_6) \
+	$(am__append_11)
 SUBDIRS = java $(am__append_10) md5
 @WITH_TURBOJPEG_TRUE@libturbojpeg_la_SOURCES = $(libjpeg_la_SOURCES) \
 @WITH_TURBOJPEG_TRUE@	turbojpeg.c turbojpeg.h transupp.c \
@@ -1034,6 +1040,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/djpeg-wrgif.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/djpeg-wrppm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/djpeg-wrtarga.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/epeg_main.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jaricom.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jcapimin.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jcapistd.Plo@am__quote@
@@ -1086,6 +1093,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jquant2.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jsimd_none.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jutils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libturbojpeg_la-epeg-jni.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libturbojpeg_la-epeg_main.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libturbojpeg_la-jaricom.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libturbojpeg_la-jcapimin.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libturbojpeg_la-jcapistd.Plo@am__quote@
@@ -1498,6 +1507,13 @@ libturbojpeg_la-jmemnobs.lo: jmemnobs.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libturbojpeg_la_CFLAGS) $(CFLAGS) -c -o libturbojpeg_la-jmemnobs.lo `test -f 'jmemnobs.c' || echo '$(srcdir)/'`jmemnobs.c
 
+libturbojpeg_la-epeg_main.lo: epeg_main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libturbojpeg_la_CFLAGS) $(CFLAGS) -MT libturbojpeg_la-epeg_main.lo -MD -MP -MF $(DEPDIR)/libturbojpeg_la-epeg_main.Tpo -c -o libturbojpeg_la-epeg_main.lo `test -f 'epeg_main.c' || echo '$(srcdir)/'`epeg_main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libturbojpeg_la-epeg_main.Tpo $(DEPDIR)/libturbojpeg_la-epeg_main.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='epeg_main.c' object='libturbojpeg_la-epeg_main.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libturbojpeg_la_CFLAGS) $(CFLAGS) -c -o libturbojpeg_la-epeg_main.lo `test -f 'epeg_main.c' || echo '$(srcdir)/'`epeg_main.c
+
 libturbojpeg_la-jaricom.lo: jaricom.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libturbojpeg_la_CFLAGS) $(CFLAGS) -MT libturbojpeg_la-jaricom.lo -MD -MP -MF $(DEPDIR)/libturbojpeg_la-jaricom.Tpo -c -o libturbojpeg_la-jaricom.lo `test -f 'jaricom.c' || echo '$(srcdir)/'`jaricom.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libturbojpeg_la-jaricom.Tpo $(DEPDIR)/libturbojpeg_la-jaricom.Plo
@@ -1560,6 +1576,13 @@ libturbojpeg_la-turbojpeg-jni.lo: turbojpeg-jni.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='turbojpeg-jni.c' object='libturbojpeg_la-turbojpeg-jni.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libturbojpeg_la_CFLAGS) $(CFLAGS) -c -o libturbojpeg_la-turbojpeg-jni.lo `test -f 'turbojpeg-jni.c' || echo '$(srcdir)/'`turbojpeg-jni.c
+
+libturbojpeg_la-epeg-jni.lo: epeg-jni.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libturbojpeg_la_CFLAGS) $(CFLAGS) -MT libturbojpeg_la-epeg-jni.lo -MD -MP -MF $(DEPDIR)/libturbojpeg_la-epeg-jni.Tpo -c -o libturbojpeg_la-epeg-jni.lo `test -f 'epeg-jni.c' || echo '$(srcdir)/'`epeg-jni.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libturbojpeg_la-epeg-jni.Tpo $(DEPDIR)/libturbojpeg_la-epeg-jni.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='epeg-jni.c' object='libturbojpeg_la-epeg-jni.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libturbojpeg_la_CFLAGS) $(CFLAGS) -c -o libturbojpeg_la-epeg-jni.lo `test -f 'epeg-jni.c' || echo '$(srcdir)/'`epeg-jni.c
 
 cjpeg-cdjpeg.o: cdjpeg.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cjpeg_CFLAGS) $(CFLAGS) -MT cjpeg-cdjpeg.o -MD -MP -MF $(DEPDIR)/cjpeg-cdjpeg.Tpo -c -o cjpeg-cdjpeg.o `test -f 'cdjpeg.c' || echo '$(srcdir)/'`cdjpeg.c
