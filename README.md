@@ -19,8 +19,8 @@ These Java libraries implement the IIIF Image API (see <a href="http://iiif.io/a
 - Image processing engines:
     - Java Image I/O API (javax.imageio)<br/>
 (see http://docs.oracle.com/javase/8/docs/api/javax/imageio/package-summary.html#package.description)
-    - Independent JPEG Group library "libjpeg8"<br/>
-(see http://ijg.org/)
+    - TurboJPEG from libjpeg-turbo "<br/>
+(see http://libjpeg-turbo.org/)
 
 ## Usage
 
