@@ -90,7 +90,9 @@ public class IIIFImageApiControllerTest {
             .andExpect(jsonPath("$.@id").
                     value("http://localhost/image/" + IIIFImageApiController.VERSION + "/http-bsb"))
             .andExpect(jsonPath("$.protocol").value("http://iiif.io/api/image"))
-            .andExpect(jsonPath("$.profile[0]").value("http://iiif.io/api/image/2/level2.json"));
+            .andExpect(jsonPath("$.profile[0]").value("http://iiif.io/api/image/2/level2.json"))
+            .andExpect(jsonPath("$.tiles.length()").value(3))
+            .andExpect(jsonPath("$.tiles[0].width").value(128));
   }
 
   @Test
@@ -255,7 +257,7 @@ public class IIIFImageApiControllerTest {
             .andReturn().getResponse().getContentAsByteArray();
     Image image = loadImage(imgData, true);
     Assert.assertEquals(750, image.getHeight());
-    Assert.assertEquals(1038, image.getWidth());
+    Assert.assertEquals(1024, image.getWidth());
   }
 
   @Test
@@ -316,16 +318,5 @@ public class IIIFImageApiControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.@id").
                     value("http://localhost/image/" + IIIFImageApiController.VERSION + "/spec%253A%252Fial%253Ffile%2523with%255Bspecial%255Dch%2540arac%2525ters"));
-  }
-
-  @Test
-  public void testWeirdCropBug() throws Exception {
-    byte[] imgData = mockMvc.
-            perform(get("/image/" + IIIFImageApiController.VERSION + "/http-google/0,0,1500,2048/750,/0/native.jpg")).
-            andExpect(status().isOk())
-            .andReturn().getResponse().getContentAsByteArray();
-    Image image = loadImage(imgData, true);
-    Assert.assertEquals(750, image.getWidth());
-    Assert.assertEquals(1038, image.getHeight());
   }
 }

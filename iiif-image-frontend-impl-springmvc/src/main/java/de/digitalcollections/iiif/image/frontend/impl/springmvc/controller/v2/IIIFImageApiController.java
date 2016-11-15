@@ -17,6 +17,8 @@ import de.digitalcollections.iiif.image.model.api.v2.TransformationException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.util.Collections;
+import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -193,6 +195,19 @@ public class IIIFImageApiController {
       info.put("height", img.getHeight()); // The height in pixels of the full image content, given as an integer.
       info.put("profile", profiles); // An array of profiles, indicated by either a URI or an object describing the features supported. The first entry in the array must be a compliance level URI, as defined below.
       info.put("protocol", "http://iiif.io/api/image");
+      JSONArray scaleFactors = new JSONArray();
+      Collections.addAll(scaleFactors, 1, 2, 4, 8, 16, 32);
+      JSONArray tiles = new JSONArray();
+      IntStream.of(128, 256, 512)
+          .mapToObj(size -> {
+            JSONObject tile = new JSONObject();
+            tile.put("width", size);
+            tile.put("height", size);
+            tile.put("scaleFactors", scaleFactors);
+            return tile;
+          })
+          .forEach(tiles::add);
+      info.put("tiles", tiles);
 
       HttpHeaders headers = new HttpHeaders();
       String contentType = request.getHeader("Accept");
