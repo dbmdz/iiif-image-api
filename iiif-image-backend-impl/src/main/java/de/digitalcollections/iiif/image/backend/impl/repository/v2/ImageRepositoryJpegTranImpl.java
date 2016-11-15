@@ -28,8 +28,7 @@ public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl imp
     if ((imageData[0] & 0xFF) != 0xFF || (imageData[1] & 0xFF) != 0xD8) {
       throw new UnsupportedFormatException("Not a JPEG file");
     }
-    JpegTranImage jpegTranImage = new JpegTranImage(imageData);
-    return jpegTranImage;
+    return new JpegTranImage(imageData);
   }
 
   @Override
@@ -50,10 +49,11 @@ public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl imp
   @Override
   public boolean supportsCropOperation(RegionParameters region) {
     return (
-        region.getWidth() % 8 == 0
-        && region.getHeight() % 8 == 0
-        && region.getHorizontalOffset() % 8 == 0
-        && region.getVerticalOffset() % 8 == 0);
+        region == null
+        || (region.getWidth() % 8 == 0
+            && region.getHeight() % 8 == 0
+            && region.getHorizontalOffset() % 8 == 0
+            && region.getVerticalOffset() % 8 == 0));
   }
 
   @Override
@@ -65,7 +65,8 @@ public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl imp
 
   @Override
   public boolean supportsBitDepth(ImageBitDepth bitDepth) {
-    return (bitDepth.equals(ImageBitDepth.GRAYSCALE)
+    return (bitDepth == null
+            || bitDepth.equals(ImageBitDepth.GRAYSCALE)
             || bitDepth.equals(ImageBitDepth.COLOR));
   }
 }

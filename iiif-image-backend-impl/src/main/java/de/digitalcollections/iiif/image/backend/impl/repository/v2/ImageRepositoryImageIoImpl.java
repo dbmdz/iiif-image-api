@@ -101,13 +101,16 @@ public class ImageRepositoryImageIoImpl extends AbstractImageRepositoryImpl {
   }
 
   @Override
-  public boolean supportsScaleOperation(Dimension imageDims, ScaleParameters scaleParams) {
+  public boolean supportsScaleOperation(Dimension imageDims, ResizeParameters scaleParams) {
     // No limitations on scaling
     return true;
   }
 
   @Override
   public boolean supportsBitDepth(ImageBitDepth bitDepth) {
+    if (bitDepth == null) {
+      return true;
+    }
     switch (bitDepth) {
       case BITONAL:
       case GRAYSCALE:
