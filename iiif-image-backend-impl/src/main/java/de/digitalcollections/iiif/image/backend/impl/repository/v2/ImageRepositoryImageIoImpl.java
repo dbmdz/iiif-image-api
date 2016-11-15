@@ -9,7 +9,7 @@ import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.v2.ScaleParameters;
+import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

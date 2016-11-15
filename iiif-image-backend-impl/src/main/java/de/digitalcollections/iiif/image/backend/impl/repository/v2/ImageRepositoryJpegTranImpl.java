@@ -8,7 +8,7 @@ import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.v2.ScaleParameters;
+import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
 import java.awt.*;
 import java.io.IOException;
 import org.slf4j.Logger;
@@ -57,9 +57,10 @@ public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl imp
   }
 
   @Override
-  public boolean supportsScaleOperation(Dimension imageDims, ScaleParameters scaleParams) {
-    return (scaleParams.getTargetHeight() < imageDims.getHeight()
-            && scaleParams.getTargetWidth() < imageDims.getWidth());
+  public boolean supportsScaleOperation(Dimension imageDims, ResizeParameters scaleParams) {
+    return (scaleParams == null
+            || (scaleParams.getWidth() < imageDims.getHeight()
+                && scaleParams.getHeight() < imageDims.getWidth()));
   }
 
   @Override

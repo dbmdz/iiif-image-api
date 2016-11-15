@@ -7,7 +7,7 @@ import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatExc
 import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.ImageInfo;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.v2.ScaleParameters;
+import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
 import java.awt.*;
 
 public interface ImageRepository {
@@ -23,7 +23,7 @@ public interface ImageRepository {
 
   public boolean supportsCropOperation(RegionParameters region);
 
-  public boolean supportsScaleOperation(Dimension imageDims, ScaleParameters scaleParams);
+  public boolean supportsScaleOperation(Dimension imageDims, ResizeParameters scaleParams);
 
   public boolean supportsBitDepth(ImageBitDepth bitDepth);
 }
