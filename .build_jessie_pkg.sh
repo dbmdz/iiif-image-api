@@ -15,4 +15,4 @@ cp .libs/libturbojpeg.so.0.1.0 ../../libturbojpeg-jni.so
 cd ../../
 fpm -s dir -t deb -n libturbojpeg-jni -v 1.5.1 --prefix /usr/lib libturbojpeg-jni.so
 rm -rf libturbojpeg-jni.so libjpeg-turbo/build
-
+chmod a+rw *.deb
