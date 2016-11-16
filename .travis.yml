@@ -14,7 +14,7 @@ services:
 
 before_script:
 - if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$TRAVIS_TAG; fi
-- bash ./install_turbojpeg_jni.sh
+- sudo bash ./install_turbojpeg_jni.sh
 
 script:
 - mvn clean install
