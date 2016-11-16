@@ -4,7 +4,7 @@ set -e
 JAVA_HOME=$(readlink -f `which javac` | sed "s:/bin/javac::")
 
 apt-get update
-apt-get -y install build-essential nasm libtool ruby ruby-dev
+apt-get -y install autoconf build-essential nasm libtool ruby ruby-dev
 gem install fpm
 cd /local/work/libjpeg-turbo
 mkdir -p ./build
