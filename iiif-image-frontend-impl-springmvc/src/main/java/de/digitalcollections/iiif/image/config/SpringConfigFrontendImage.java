@@ -32,7 +32,7 @@ public class SpringConfigFrontendImage extends WebMvcConfigurerAdapter {
     // support for @ResponseBody of type byte[]
     ByteArrayHttpMessageConverter bc = new ByteArrayHttpMessageConverter();
     List<MediaType> supported = new ArrayList<>();
-    supported.add(MediaType.IMAGE_JPEG);
+    supported.add(MediaType.ALL);
     bc.setSupportedMediaTypes(supported);
     converters.add(bc);
   }
