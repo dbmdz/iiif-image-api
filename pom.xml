@@ -8,8 +8,19 @@
   <version>2.2.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   
+  <modules>
+    <module>iiif-image-model-api</module>
+    <module>iiif-image-model-impl</module>
+    <module>iiif-image-frontend-impl-springmvc</module>
+    <module>iiif-image-business-api</module>
+    <module>iiif-image-business-impl</module>
+    <module>iiif-image-backend-api</module>
+    <module>iiif-image-backend-impl</module>
+  </modules>
+
   <name>DigitalCollections: IIIF Image API Library</name>
   <description>Java library implementing the IIIF Image API 2.0.0 (see http://iiif.io/api/image/2.0/)</description>
+
   <url>https://github.com/dbmdz/iiif-image-api</url>
   <licenses>
     <license>
@@ -162,16 +173,28 @@
       </plugin>
     </plugins>
   </build>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
   
-  <modules>
-    <module>iiif-image-model-api</module>
-    <module>iiif-image-model-impl</module>
-    <module>iiif-image-frontend-impl-springmvc</module>
-    <module>iiif-image-business-api</module>
-    <module>iiif-image-business-impl</module>
-    <module>iiif-image-backend-api</module>
-    <module>iiif-image-backend-impl</module>
-  </modules>
+  <repositories>
+    <repository>
+      <id>ossrh-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
     
   <dependencyManagement>
     <dependencies>
