@@ -53,6 +53,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   protected abstract Image createImage(String identifier, RegionParameters region) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException;
 
   @Override
+  @CacheResult(cacheName = "imageSources")
   public Image getImage(String identifier, RegionParameters regionParameters) throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException {
     Image image;
     try {
@@ -69,7 +70,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
     return image;
   }
 
-  ByteBuffer getImageData(String identifier) throws ResolvingException {
+  public ByteBuffer getImageData(String identifier) throws ResolvingException {
     Resource resource = getImageResource(identifier);
     URI imageUri = resource.getUri();
     LOGGER.info("URI for {} is {}", identifier, imageUri.toString());
@@ -87,7 +88,6 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
     return resource;
   }
 
-  @CacheResult(cacheName = "imageSources")
   private ByteBuffer getImageData(URI imageUri) throws ResolvingException {
     String location = imageUri.toString();
     LOGGER.debug("Trying to get image data from: " + location);
