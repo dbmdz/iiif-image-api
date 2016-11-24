@@ -24,7 +24,7 @@ public class ImageRepositoryImageIoImpl extends AbstractImageRepositoryImpl {
 
   @Override
   protected Image createImage(String identifier, RegionParameters regionParameters) throws ResolvingException, UnsupportedFormatException, IOException {
-      ByteBuffer imageData = getImageData(identifier);
+      ByteBuffer imageData = imageDataRepository.getImageData(identifier);
       return new JAIImage(imageData.array(), regionParameters);
   }
 

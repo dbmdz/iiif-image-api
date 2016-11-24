@@ -1,14 +1,13 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.imageio.v2;
 
-import de.digitalcollections.iiif.image.model.api.v2.Image;
-import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import de.digitalcollections.iiif.image.model.api.v2.Image;
+import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -23,7 +22,6 @@ import javax.imageio.stream.ImageInputStream;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StopWatch;
 
 public class JAIImage implements Image {
 
@@ -47,8 +45,6 @@ public class JAIImage implements Image {
 
   public JAIImage(InputStream imgData, RegionParameters region) throws IOException, UnsupportedFormatException {
     ImageIO.setUseCache(true);
-    // TODO directory
-    // ImageIO.setCacheDirectory(null);
     ImageReader reader = null;
     try (final ImageInputStream imageInputStream = ImageIO.createImageInputStream(imgData)) {
       Iterator<ImageReader> readers = ImageIO.getImageReaders(imageInputStream);

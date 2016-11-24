@@ -26,7 +26,7 @@ public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl imp
   @Override
   @Cacheable(value="sourceImages")
   protected Image createImage(String identifier, RegionParameters regionParameters) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException {
-    byte[] imageData = getImageData(identifier).array();
+    byte[] imageData = imageDataRepository.getImageData(identifier).array();
     if ((imageData[0] & 0xFF) != 0xFF || (imageData[1] & 0xFF) != 0xD8) {
       throw new UnsupportedFormatException("Not a JPEG file");
     }
