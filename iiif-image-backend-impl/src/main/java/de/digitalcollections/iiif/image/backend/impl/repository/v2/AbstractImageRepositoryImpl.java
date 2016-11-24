@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+import javax.cache.annotation.CacheResult;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -29,7 +30,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 
 public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractImageRepositoryImpl.class);
@@ -87,6 +87,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
     return resource;
   }
 
+  @CacheResult(cacheName = "imageSources")
   private ByteBuffer getImageData(URI imageUri) throws ResolvingException {
     String location = imageUri.toString();
     LOGGER.debug("Trying to get image data from: " + location);
@@ -119,7 +120,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   }
 
   @Override
-  @Cacheable("imageInfos")
+  @CacheResult(cacheName="imageInfos")
   public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException {
     ImageInfo imageInfo = null;
     try {
