@@ -53,7 +53,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   protected abstract Image createImage(String identifier, RegionParameters region) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException;
 
   @Override
-  @CacheResult(cacheName = "imageSources")
+  @CacheResult(cacheName = "sourceImages")
   public Image getImage(String identifier, RegionParameters regionParameters) throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException {
     Image image;
     try {

@@ -3,12 +3,6 @@
     xmlns='http://www.ehcache.org/v3'
     xmlns:jsr107='http://www.ehcache.org/v3/jsr107'>
 
-  <!--service>
-    <jsr107:defaults>
-      <jsr107:cache name="sourceImages" template="threetiered"/>
-    </jsr107:defaults>
-  </service-->
-  
   <persistence directory="${java.io.tmpdir}" />
 
   <cache alias="sourceImages" uses-template="threetiered" />
