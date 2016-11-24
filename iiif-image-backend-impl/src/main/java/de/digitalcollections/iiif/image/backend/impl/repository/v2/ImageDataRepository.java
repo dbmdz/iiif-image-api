@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ImageDataRepository {
-  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractImageRepositoryImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ImageDataRepository.class);
 
   @Value("${iiif.image.forceJpeg:false}")
   private boolean forceJpeg;
@@ -43,7 +43,8 @@ public class ImageDataRepository {
     }
   }
 
-  ByteBuffer getImageData(String identifier) throws ResolvingException {
+  @CacheResult(cacheName = "sourceImages")
+  public ByteBuffer getImageData(String identifier) throws ResolvingException {
     Resource resource = getImageResource(identifier);
     URI imageUri = resource.getUri();
     LOGGER.info("URI for {} is {}", identifier, imageUri.toString());
@@ -68,7 +69,6 @@ public class ImageDataRepository {
     return resource;
   }
 
-  @CacheResult(cacheName = "sourceImages")
   private ByteBuffer getImageData(URI imageUri) throws ResolvingException {
     String location = imageUri.toString();
     LOGGER.debug("Trying to get image data from: " + location);
