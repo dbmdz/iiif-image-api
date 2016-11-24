@@ -1,15 +1,20 @@
 package de.digitalcollections.iiif.image.config;
 
-import de.digitalcollections.iiif.image.backend.impl.cache.BufferedImageCache;
+import java.io.IOException;
+import javax.cache.CacheManager;
+import javax.cache.Caching;
+import org.ehcache.jsr107.EhcacheCachingProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.util.StringUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 /**
  * Backend configuration.
@@ -22,6 +27,7 @@ import org.springframework.util.StringUtils;
 @PropertySource(value = {
   "classpath:de/digitalcollections/iiif/image/config/SpringConfigBackend-${spring.profiles.active:PROD}.properties"
 })
+@EnableCaching
 public class SpringConfigBackendImage {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SpringConfigBackendImage.class);
@@ -31,21 +37,17 @@ public class SpringConfigBackendImage {
     return new PropertySourcesPlaceholderConfigurer();
   }
 
-  private String bufferedImageCacheDirectory;
-
-  @Value("${bufferedImageCacheDirectory}")
-  public void setBufferedImageCacheDirectory(String path) {
-    this.bufferedImageCacheDirectory = path.replaceFirst("~", System.getProperty("user.home"));
+  @Bean
+  public JCacheCacheManager jCacheManager(CacheManager cacheManager) {
+    return new JCacheCacheManager(cacheManager);
   }
 
   @Bean
-  public BufferedImageCache getBufferedImageCache() {
-    BufferedImageCache bufferedImageCache = new BufferedImageCache();
-    if (StringUtils.isEmpty(bufferedImageCacheDirectory)) {
-      // TODO make use of cache configurable
-//        bufferedImageCache.s
-    }
-    bufferedImageCache.setCacheDir(bufferedImageCacheDirectory);
-    return bufferedImageCache;
+  public CacheManager cacheManager(ResourceLoader resourceLoader) throws IOException {
+    EhcacheCachingProvider provider = (EhcacheCachingProvider) Caching.getCachingProvider();
+    Resource configLocation = resourceLoader.getResource("classpath:ehcache.xml");
+    return  provider.getCacheManager(
+        configLocation.getURI(),
+        provider.getDefaultClassLoader());
   }
 }

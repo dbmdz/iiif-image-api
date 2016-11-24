@@ -13,6 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Repository;
@@ -23,8 +24,9 @@ public class ImageRepositoryJpegTranImpl extends AbstractImageRepositoryImpl imp
   private static final Logger LOGGER = LoggerFactory.getLogger(ImageRepositoryJpegTranImpl.class);
 
   @Override
+  @Cacheable(value="sourceImages")
   protected Image createImage(String identifier, RegionParameters regionParameters) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException {
-    byte[] imageData = getImageData(identifier);
+    byte[] imageData = getImageData(identifier).array();
     if ((imageData[0] & 0xFF) != 0xFF || (imageData[1] & 0xFF) != 0xD8) {
       throw new UnsupportedFormatException("Not a JPEG file");
     }

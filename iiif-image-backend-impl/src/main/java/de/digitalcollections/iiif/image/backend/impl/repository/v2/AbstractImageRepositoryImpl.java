@@ -1,7 +1,5 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.v2;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import de.digitalcollections.core.business.api.ResourceService;
 import de.digitalcollections.core.model.api.MimeType;
 import de.digitalcollections.core.model.api.resource.Resource;
@@ -22,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -30,23 +29,17 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 
 public abstract class AbstractImageRepositoryImpl implements ImageRepository {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractImageRepositoryImpl.class);
 
   private boolean forceJpeg;
 
-  private final Cache<String, byte[]> httpCache;
-
   @Autowired
   private ResourceService resourceService;
 
-  public AbstractImageRepositoryImpl() {
-    httpCache = CacheBuilder.newBuilder().maximumSize(32).build();
-  }
-
-  protected byte[] convertToJpeg(byte[] data) throws IOException {
+  private byte[] convertToJpeg(byte[] data) throws IOException {
     if ((data[0] & 0xFF) != 0xFF || (data[1] & 0xFF) != 0xD8) {
       BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
       ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -76,7 +69,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
     return image;
   }
 
-  protected byte[] getImageData(String identifier) throws ResolvingException {
+  ByteBuffer getImageData(String identifier) throws ResolvingException {
     Resource resource = getImageResource(identifier);
     URI imageUri = resource.getUri();
     LOGGER.info("URI for {} is {}", identifier, imageUri.toString());
@@ -94,7 +87,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
     return resource;
   }
 
-  private byte[] getImageData(URI imageUri) throws ResolvingException {
+  private ByteBuffer getImageData(URI imageUri) throws ResolvingException {
     String location = imageUri.toString();
     LOGGER.debug("Trying to get image data from: " + location);
 
@@ -102,23 +95,8 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
       byte[] imageData;
       String scheme = imageUri.getScheme();
 
-      // use caching for remote/http resources
-      if ("http".equals(scheme)) {
-        String cacheKey = location;
-        imageData = httpCache.getIfPresent(cacheKey);
-        if (imageData != null) {
-          LOGGER.debug("HTTP Cache hit for image data " + cacheKey);
-          return imageData;
-        }
-      }
-
       InputStream inputStream = resourceService.getInputStream(imageUri);
       imageData = IOUtils.toByteArray(inputStream);
-
-      if ("http".equals(scheme)) {
-        String cacheKey = location;
-        httpCache.put(cacheKey, imageData);
-      }
 
       if (imageData == null || imageData.length == 0) {
         throw new ResolvingException("No image data at location " + location);
@@ -133,7 +111,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
         }
       }
 
-      return imageData;
+      return ByteBuffer.wrap(imageData);
     } catch (IOException ex) {
       LOGGER.warn("Error getting image data from location " + location);
       throw new ResolvingException("No image data for location " + location);
@@ -141,6 +119,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   }
 
   @Override
+  @Cacheable("imageInfos")
   public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException {
     ImageInfo imageInfo = null;
     try {
