@@ -110,8 +110,8 @@ public class JpegTranImage implements Image {
       }
       jpegImage.downScale(newWidth, newHeight, 85);
     } catch (IllegalArgumentException|TJException e) {
-      LOGGER.error("Downscaling image failed");
-      LOGGER.info("ResizeParameters: " + params.toString());
+      LOGGER.error("Downscaling image failed", e);
+      LOGGER.info("Tried to scale down from {}x{} to {}x{}", oldWidth, oldHeight, params.getWidth(), params.getHeight());
     }
     return this;
   }

@@ -1,7 +1,6 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.v2;
 
 import de.digitalcollections.iiif.image.backend.api.repository.v2.ImageRepository;
-import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.model.api.exception.ResolvingException;
 import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException;
@@ -9,6 +8,7 @@ import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.ImageInfo;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
 import de.digitalcollections.iiif.image.model.impl.v2.ImageInfoImpl;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.cache.annotation.CacheResult;
@@ -49,14 +49,13 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   @CacheResult(cacheName = "imageInfos")
   public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException {
     ImageInfo imageInfo = null;
-    try (ImageInputStream in = ImageIO.createImageInputStream(imageDataRepository.getImageStream(identifier))) {
+    try (ImageInputStream in = ImageIO.createImageInputStream(new ByteArrayInputStream(imageDataRepository.getImageData(identifier)))) {
       final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
       if (readers.hasNext()) {
         ImageReader reader = readers.next();
         reader.setInput(in);
         imageInfo = new ImageInfoImpl();
         final String formatName = reader.getFormatName();
-        imageInfo.setFormat(ImageFormat.getByExtension(formatName));
         imageInfo.setHeight(reader.getHeight(0));
         imageInfo.setWidth(reader.getWidth(0));
         reader.dispose();

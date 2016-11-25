@@ -1,16 +1,10 @@
 package de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2;
 
-import static javafx.scene.input.KeyCode.T;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.Arrays;
-
 import org.apache.commons.io.IOUtils;
 import org.libjpegturbo.turbojpeg.TJ;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
@@ -148,7 +142,9 @@ public class JpegImage {
     }
 
     if (width > getWidth() || height > getHeight()) {
-      throw new IllegalArgumentException("Target dimensions must be smaller than original dimensions.");
+      throw new IllegalArgumentException(String.format(
+          "Target dimensions must be smaller than original dimensions, were %sx%s vs %sx%s.",
+          getWidth(), getHeight(), width, height));
     }
     if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("Width and height must be greater than 0");

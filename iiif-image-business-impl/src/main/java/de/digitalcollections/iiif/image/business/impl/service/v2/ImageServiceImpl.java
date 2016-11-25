@@ -85,21 +85,25 @@ public class ImageServiceImpl implements ImageService {
     return image;
   }
 
-  private Image transformImage(Image image, RegionParameters regionParameters, ResizeParameters sizeParameters, RotationParameters rotationParameters, ImageBitDepth bitDepthParameter, ImageFormat formatParameter)
+  private Image transformImage(Image image, RegionParameters regionParameters, ResizeParameters sizeParameters,
+                               RotationParameters rotationParameters, ImageBitDepth bitDepthParameter,
+                               ImageFormat formatParameter)
       throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException {
 
     // now do processing:
-    if (regionParameters != null && (image.getWidth() != regionParameters.getWidth() || image.
-            getHeight() != regionParameters.getHeight())) {
+    if (regionParameters != null && (image.getWidth() != regionParameters.getWidth()
+        || image.getHeight() != regionParameters.getHeight())) {
       image = image.crop(regionParameters);
     }
 
     if (sizeParameters != null) {
-      sizeParameters = new ResizeParametersImpl(sizeParameters, image.getWidth(), image.getHeight());
+      int sourceWidth = regionParameters != null ? (int) regionParameters.getWidth() : image.getWidth();
+      int sourceHeight = regionParameters != null ? (int) regionParameters.getHeight() : image.getHeight();
+      sizeParameters = new ResizeParametersImpl(sizeParameters, sourceWidth, sourceHeight);
     }
 
-    if (sizeParameters != null && sizeParameters.getMaxHeight() != -1 && sizeParameters.
-            getMaxWidth() != -1) {
+    if (sizeParameters != null && sizeParameters.getMaxHeight() != -1
+        && sizeParameters.getMaxWidth() != -1) {
       image = image.scale(sizeParameters);
     }
     if (rotationParameters != null) {

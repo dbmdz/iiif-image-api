@@ -15,6 +15,14 @@ public class EventLogger implements CacheEventListener<Object, Object> {
 
   @Override
   public void onEvent(CacheEvent<Object, Object> event) {
-    LOGGER.debug("{}: {}", event.getType(), event.getKey());
+    if (LOGGER.isDebugEnabled()) {
+      switch (event.getType()) {
+        case CREATED:
+          LOGGER.debug("CACHE MISS for {}", event.getKey());
+          break;
+        default:
+          LOGGER.debug("{} {}", event.getType(), event.getKey());
+      }
+    }
   }
 }

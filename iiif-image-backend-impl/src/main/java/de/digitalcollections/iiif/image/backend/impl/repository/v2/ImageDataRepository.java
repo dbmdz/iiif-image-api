@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.ByteBuffer;
 import javax.cache.annotation.CacheResult;
 import javax.imageio.ImageIO;
 import org.apache.commons.io.IOUtils;
@@ -44,7 +43,7 @@ public class ImageDataRepository {
   }
 
   @CacheResult(cacheName = "sourceImages")
-  public ByteBuffer getImageData(String identifier) throws ResolvingException {
+  public byte[] getImageData(String identifier) throws ResolvingException {
     Resource resource = getImageResource(identifier);
     URI imageUri = resource.getUri();
     LOGGER.info("URI for {} is {}", identifier, imageUri.toString());
@@ -69,7 +68,7 @@ public class ImageDataRepository {
     return resource;
   }
 
-  private ByteBuffer getImageData(URI imageUri) throws ResolvingException {
+  private byte[] getImageData(URI imageUri) throws ResolvingException {
     String location = imageUri.toString();
     LOGGER.debug("Trying to get image data from: " + location);
 
@@ -91,7 +90,7 @@ public class ImageDataRepository {
         }
       }
 
-      return ByteBuffer.wrap(imageData);
+      return imageData;
     } catch (IOException ex) {
       LOGGER.warn("Error getting image data from location " + location);
       throw new ResolvingException("No image data for location " + location);

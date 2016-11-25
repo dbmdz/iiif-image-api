@@ -1,30 +1,11 @@
 package de.digitalcollections.iiif.image.model.impl.v2;
 
 import de.digitalcollections.iiif.image.model.api.v2.ImageInfo;
-import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
-import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
 
 public class ImageInfoImpl implements ImageInfo {
 
-  private ImageBitDepth bitDepth;
   private int height;
-  private ImageFormat format;
   private int width;
-
-  @Override
-  public ImageBitDepth getBitDepth() {
-    return bitDepth;
-  }
-
-  @Override
-  public ImageFormat getFormat() {
-    return format;
-  }
-
-  @Override
-  public int getHeight() {
-    return height;
-  }
 
   @Override
   public int getWidth() {
@@ -32,13 +13,8 @@ public class ImageInfoImpl implements ImageInfo {
   }
 
   @Override
-  public void setBitDepth(ImageBitDepth bitDepth) {
-    this.bitDepth = bitDepth;
-  }
-
-  @Override
-  public void setFormat(ImageFormat format) {
-    this.format = format;
+  public int getHeight() {
+    return height;
   }
 
   @Override

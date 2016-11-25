@@ -10,7 +10,6 @@ import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
 import java.awt.*;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
@@ -24,8 +23,8 @@ public class ImageRepositoryImageIoImpl extends AbstractImageRepositoryImpl {
 
   @Override
   protected Image createImage(String identifier, RegionParameters regionParameters) throws ResolvingException, UnsupportedFormatException, IOException {
-      ByteBuffer imageData = imageDataRepository.getImageData(identifier);
-      return new JAIImage(imageData.array(), regionParameters);
+      byte[] imageData = imageDataRepository.getImageData(identifier);
+      return new JAIImage(imageData, regionParameters);
   }
 
   @Override
