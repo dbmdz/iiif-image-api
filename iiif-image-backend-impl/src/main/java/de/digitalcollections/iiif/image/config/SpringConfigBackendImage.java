@@ -6,6 +6,7 @@ import javax.cache.Caching;
 import org.ehcache.jsr107.EhcacheCachingProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,8 @@ import org.springframework.core.io.ResourceLoader;
 })
 @EnableCaching
 public class SpringConfigBackendImage {
+  @Value("classpath:ehcache-${spring.profiles.active:PROD}.xml")
+  private String ehcacheConfigPath;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SpringConfigBackendImage.class);
 
@@ -45,7 +48,7 @@ public class SpringConfigBackendImage {
   @Bean
   public CacheManager cacheManager(ResourceLoader resourceLoader) throws IOException {
     EhcacheCachingProvider provider = (EhcacheCachingProvider) Caching.getCachingProvider();
-    Resource configLocation = resourceLoader.getResource("classpath:ehcache.xml");
+    Resource configLocation = resourceLoader.getResource(ehcacheConfigPath);
     return  provider.getCacheManager(
         configLocation.getURI(),
         provider.getDefaultClassLoader());
