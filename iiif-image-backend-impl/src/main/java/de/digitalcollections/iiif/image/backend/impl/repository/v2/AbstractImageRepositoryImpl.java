@@ -23,7 +23,7 @@ public abstract class AbstractImageRepositoryImpl implements ImageRepository {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractImageRepositoryImpl.class);
 
   @Autowired
-  protected ImageDataRepository imageDataRepository;
+  protected ImageDataRepositoryImpl imageDataRepository;
 
   protected abstract Image createImage(String identifier, RegionParameters region) throws InvalidParametersException, ResolvingException, UnsupportedFormatException, IOException;
 

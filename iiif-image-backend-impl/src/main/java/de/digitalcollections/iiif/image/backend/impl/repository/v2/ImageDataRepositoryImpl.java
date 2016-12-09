@@ -21,9 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Separate class from AbstractImageRepositoryImpl needed, because otherwise methods with caching do not cache if called
+ * inside AbstractImageRepositoryImpl
+ */
 @Repository
-public class ImageDataRepository {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ImageDataRepository.class);
+public class ImageDataRepositoryImpl {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ImageDataRepositoryImpl.class);
 
   @Value("${iiif.image.forceJpeg:false}")
   private boolean forceJpeg;
@@ -62,8 +67,8 @@ public class ImageDataRepository {
     try {
       resource = resourceService.get(identifier, ResourcePersistenceType.REFERENCED, MimeType.MIME_IMAGE);
     } catch (ResourceIOException ex) {
-      LOGGER.warn("Error getting manifest for identifier " + identifier, ex);
-      throw new ResolvingException("No manifest for identifier " + identifier);
+      LOGGER.warn("Error getting image for identifier " + identifier, ex);
+      throw new ResolvingException("No image for identifier " + identifier);
     }
     return resource;
   }
