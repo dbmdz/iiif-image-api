@@ -26,6 +26,7 @@ public class SpringConfigFrontendImage extends WebMvcConfigurerAdapter {
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     // support for @ResponseBody of type String
     final StringHttpMessageConverter stringHMC = new StringHttpMessageConverter(StandardCharsets.UTF_8);
+    stringHMC.setWriteAcceptCharset(false);
     // supported MediaTypes for stringHMC are by default set to: "text/plain" and MediaType.ALL
     converters.add(stringHMC);
 
