@@ -152,8 +152,8 @@ public class IIIFImageApiController {
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
       throw new UnsupportedFormatException(ex.getMessage());
     } catch (TransformationException ex) {
-      throw new de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException(ex.
-              getMessage());
+      throw new de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException(
+          ex.getMessage());
     }
   }
 
@@ -179,7 +179,8 @@ public class IIIFImageApiController {
    */
   @SuppressWarnings("unchecked")
   @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
-  @RequestMapping(value = "{identifier}/info.json", method = RequestMethod.GET)
+  @RequestMapping(value = "{identifier}/info.json",
+                  method = {RequestMethod.GET, RequestMethod.HEAD})
   public ResponseEntity<String> getInfo(@PathVariable String identifier,
           HttpServletRequest request) throws ResolvingException,
           UnsupportedFormatException, UnsupportedOperationException, IOException {
@@ -231,9 +232,8 @@ public class IIIFImageApiController {
   }
 
   @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
-  @RequestMapping(value = "{identifier}", method = RequestMethod.GET)
-  public String getInfoRedirect(@PathVariable String identifier
-  ) {
+  @RequestMapping(value = "{identifier}", method = {RequestMethod.GET, RequestMethod.HEAD})
+  public String getInfoRedirect(@PathVariable String identifier) {
     return "redirect:/image/" + VERSION + "/" + identifier + "/info.json";
   }
 }
