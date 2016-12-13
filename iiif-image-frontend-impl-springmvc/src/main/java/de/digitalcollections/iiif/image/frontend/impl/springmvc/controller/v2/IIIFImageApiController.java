@@ -104,6 +104,8 @@ public class IIIFImageApiController {
    * @throws URISyntaxException if uri for image is erroneous
    * @throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException if parameters
    * can not be parsed
+   * @throws de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException if image can not
+   * be transformed
    */
   @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
   @RequestMapping(value = "{identifier}/{region}/{size}/{rotation}/{quality}.{format}")
@@ -153,7 +155,7 @@ public class IIIFImageApiController {
       throw new UnsupportedFormatException(ex.getMessage());
     } catch (TransformationException ex) {
       throw new de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException(
-          ex.getMessage());
+              ex.getMessage());
     }
   }
 
@@ -180,7 +182,7 @@ public class IIIFImageApiController {
   @SuppressWarnings("unchecked")
   @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
   @RequestMapping(value = "{identifier}/info.json",
-                  method = {RequestMethod.GET, RequestMethod.HEAD})
+          method = {RequestMethod.GET, RequestMethod.HEAD})
   public ResponseEntity<String> getInfo(@PathVariable String identifier,
           HttpServletRequest request) throws ResolvingException,
           UnsupportedFormatException, UnsupportedOperationException, IOException {
@@ -204,14 +206,14 @@ public class IIIFImageApiController {
       Collections.addAll(scaleFactors, 1, 2, 4, 8, 16, 32);
       JSONArray tiles = new JSONArray();
       IntStream.of(128, 256, 512)
-          .mapToObj(size -> {
-            JSONObject tile = new JSONObject();
-            tile.put("width", size);
-            tile.put("height", size);
-            tile.put("scaleFactors", scaleFactors);
-            return tile;
-          })
-          .forEach(tiles::add);
+              .mapToObj(size -> {
+                JSONObject tile = new JSONObject();
+                tile.put("width", size);
+                tile.put("height", size);
+                tile.put("scaleFactors", scaleFactors);
+                return tile;
+              })
+              .forEach(tiles::add);
       info.put("tiles", tiles);
 
       HttpHeaders headers = new HttpHeaders();
