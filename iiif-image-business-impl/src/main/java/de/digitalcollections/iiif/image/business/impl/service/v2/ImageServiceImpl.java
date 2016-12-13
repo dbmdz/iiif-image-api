@@ -33,9 +33,9 @@ public class ImageServiceImpl implements ImageService {
   private ImageSecurityService imageSecurityService;
 
   @Override
-  public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException {
+  public ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException, ResourceNotFoundException {
     if (imageSecurityService != null && !imageSecurityService.isAccessAllowed(identifier)) {
-      throw new ResourceNotFoundException(); // TODO maybe throw an explicitely access disallowed exception
+      throw new ResourceNotFoundException();
     }
     // FIXME: This is really ugly, but unfortunately there's no way to tell from the identifier what
     // format we're dealing with...
@@ -72,10 +72,10 @@ public class ImageServiceImpl implements ImageService {
 
   @Override
   public Image processImage(String identifier, RegionParameters regionParameters, ResizeParameters sizeParameters, RotationParameters rotationParameters, ImageBitDepth bitDepthParameter, ImageFormat formatParameter)
-      throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException {
+      throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException, ResourceNotFoundException {
     if (imageSecurityService != null && !imageSecurityService.isAccessAllowed(identifier)) {
       LOGGER.info("Access to image '{}' is not allowed!", identifier);
-      throw new ResourceNotFoundException(); // TODO maybe throw an explicitely access disallowed exception
+      throw new ResourceNotFoundException();
     }
     Image image = getImage(identifier, regionParameters, formatParameter, bitDepthParameter);
     if (image == null) {

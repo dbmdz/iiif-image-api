@@ -5,6 +5,7 @@ import de.digitalcollections.iiif.image.business.api.service.v2.ImageService;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResourceNotFoundException;
+import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
@@ -13,8 +14,8 @@ import de.digitalcollections.iiif.image.model.api.v2.ImageInfo;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
 import de.digitalcollections.iiif.image.model.api.v2.RotationParameters;
-import de.digitalcollections.iiif.image.model.api.v2.TransformationException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.Collections;
@@ -153,9 +154,10 @@ public class IIIFImageApiController {
       throw new InvalidParametersException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
       throw new UnsupportedFormatException(ex.getMessage());
-    } catch (TransformationException ex) {
-      throw new de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException(
-              ex.getMessage());
+    } catch (de.digitalcollections.iiif.image.model.api.v2.TransformationException ex) {
+      throw new TransformationException(ex.getMessage());
+    } catch (de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException e) {
+      throw new ResourceNotFoundException();
     }
   }
 
@@ -185,14 +187,11 @@ public class IIIFImageApiController {
           method = {RequestMethod.GET, RequestMethod.HEAD})
   public ResponseEntity<String> getInfo(@PathVariable String identifier,
           HttpServletRequest request) throws ResolvingException,
-          UnsupportedFormatException, UnsupportedOperationException, IOException {
+      UnsupportedFormatException, UnsupportedOperationException, UnsupportedEncodingException {
     try {
       identifier = URLDecoder.decode(identifier, "UTF-8");
       String baseUrl = getBasePath(request, identifier);
       ImageInfo img = imageService.getImageInfo(identifier);
-      if (img == null) {
-        throw new ResourceNotFoundException();
-      }
       JSONObject info = new JSONObject();
       JSONArray profiles = new JSONArray();
       profiles.add(IIIF_COMPLIANCE);
@@ -230,6 +229,8 @@ public class IIIFImageApiController {
       return new ResponseEntity<>(json, headers, HttpStatus.OK);
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
       throw new UnsupportedFormatException(ex.getMessage());
+    } catch (de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException e) {
+      throw new ResourceNotFoundException();
     }
   }
 

@@ -1,5 +1,6 @@
 package de.digitalcollections.iiif.image.business.api.service.v2;
 
+import de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException;
 import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.ImageInfo;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
@@ -16,9 +17,9 @@ import de.digitalcollections.iiif.image.model.api.v2.TransformationException;
  */
 public interface ImageService {
 
-  ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException;
+  ImageInfo getImageInfo(String identifier) throws UnsupportedFormatException, UnsupportedOperationException, ResourceNotFoundException;
 
   Image processImage(String identifier, RegionParameters regionParameters, ResizeParameters sizeParameters, RotationParameters rotationParameters, ImageBitDepth bitDepthParameter, ImageFormat formatParameter)
-      throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException;
+      throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException, ResourceNotFoundException;
 
 }
