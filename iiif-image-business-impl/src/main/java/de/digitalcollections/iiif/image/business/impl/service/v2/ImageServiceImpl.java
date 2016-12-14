@@ -42,7 +42,6 @@ public class ImageServiceImpl implements ImageService {
     for (ImageRepository repo : this.imageRepositories) {
       try {
         ImageInfo info = repo.getImageInfo(identifier);
-        LOGGER.debug("Using " + repo.getClass().getName());
         return info;
       } catch (Throwable repoNotWorking) {
       }
@@ -60,7 +59,6 @@ public class ImageServiceImpl implements ImageService {
       }
       try {
         Image image = repo.getImage(identifier, regionParameters);
-        LOGGER.debug("Using " + repo.getClass().getName());
         return image;
       } catch (InvalidParametersException e) {
         throw e;

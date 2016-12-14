@@ -23,8 +23,9 @@ public class ImageRepositoryImageIoImpl extends AbstractImageRepositoryImpl {
 
   @Override
   protected Image createImage(String identifier, RegionParameters regionParameters) throws ResolvingException, UnsupportedFormatException, IOException {
-      byte[] imageData = imageDataRepository.getImageData(identifier);
-      return new JAIImage(imageData, regionParameters);
+    LOGGER.debug("Loading image {} with ImageIO imlementation.", identifier);
+    byte[] imageData = imageDataRepository.getImageData(identifier);
+    return new JAIImage(imageData, regionParameters);
   }
 
   @Override
