@@ -2,25 +2,11 @@ package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2;
 
 import de.digitalcollections.iiif.image.business.api.service.v2.IiifParameterParserService;
 import de.digitalcollections.iiif.image.business.api.service.v2.ImageService;
-import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException;
-import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException;
-import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResourceNotFoundException;
+import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.*;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException;
-import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
-import de.digitalcollections.iiif.image.model.api.v2.Image;
-import de.digitalcollections.iiif.image.model.api.v2.ImageInfo;
-import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
-import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
-import de.digitalcollections.iiif.image.model.api.v2.RotationParameters;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.util.Collections;
-import java.util.stream.IntStream;
-import javax.servlet.http.HttpServletRequest;
+import de.digitalcollections.iiif.image.model.api.v2.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -35,6 +21,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.util.Collections;
+import java.util.stream.IntStream;
+import java.lang.UnsupportedOperationException;
 
 @Controller(value = "IIIFImageApiController-v2")
 @RequestMapping("/image/v2/")
@@ -63,13 +58,17 @@ public class IIIFImageApiController {
     if (scheme == null) {
       scheme = request.getScheme();
     }
+    String serverName = request.getHeader("x-forwarded-host");
+    if (serverName == null) {
+      serverName = request.getServerName();
+    }
     if (request.getServerPort() != 80) {
       baseUrl = String.format("%s://%s:%d%s", scheme,
-              request.getServerName(), request.getServerPort(),
+              serverName, request.getServerPort(),
               idEndpoint);
     } else {
       baseUrl = String.format("%s://%s%s", scheme,
-              request.getServerName(), idEndpoint);
+              serverName, idEndpoint);
     }
     return baseUrl;
   }

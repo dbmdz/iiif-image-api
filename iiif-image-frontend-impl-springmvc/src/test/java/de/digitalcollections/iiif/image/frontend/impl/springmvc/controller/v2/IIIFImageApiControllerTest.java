@@ -174,6 +174,20 @@ public class IIIFImageApiControllerTest {
             .andExpect(header().string("Access-Control-Allow-Origin", "http://im.a.foreign.er"));
   }
 
+  @Test
+  public void testXForwardedProto() throws Exception {
+    mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-google/info.json")
+            .header("X-Forwarded-Proto", "https"))
+            .andExpect(jsonPath("$.@id").value("https://localhost/image/" + IIIFImageApiController.VERSION + "/http-google"));
+  }
+
+    @Test
+    public void testXForwardedHost() throws Exception {
+        mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-google/info.json")
+                .header("X-Forwarded-Host", "example.org"))
+                .andExpect(jsonPath("$.@id").value("http://example.org/image/" + IIIFImageApiController.VERSION + "/http-google"));
+    }
+
 
   /* 4.1 Region */
   @Test
