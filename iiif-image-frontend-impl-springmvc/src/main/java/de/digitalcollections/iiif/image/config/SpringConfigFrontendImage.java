@@ -21,7 +21,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 })
 @EnableWebMvc
 public class SpringConfigFrontendImage extends WebMvcConfigurerAdapter {
-
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     // support for @ResponseBody of type String

@@ -7,6 +7,7 @@ import de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatExc
 import de.digitalcollections.iiif.image.model.api.v2.Image;
 import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
 import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
+import de.digitalcollections.iiif.image.model.api.v2.TransformationException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -215,23 +216,20 @@ public class JAIImage implements Image {
   }
 
   @Override
-  public Image convert(ImageFormat targetFormat) throws UnsupportedOperationException {
+  public Image convert(ImageFormat targetFormat) throws UnsupportedOperationException, TransformationException {
     // FIXME: png to jpeg conversion results in inverted image...
     ImageFormat sourceFormat = getFormat();
     if (sourceFormat != targetFormat) {
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       try {
         ImageIO.write(image, targetFormat.name().toLowerCase(), os);
-      } catch (IOException ex) {
-        LOGGER.error(null, ex);
-      }
-      InputStream fis = new ByteArrayInputStream(os.toByteArray());
-      try {
+        InputStream fis = new ByteArrayInputStream(os.toByteArray());
         image = ImageIO.read(fis);
+        this.formatString = targetFormat.name();
       } catch (IOException ex) {
-        LOGGER.error(null, ex);
+        LOGGER.error("Could not read converted image", ex);
+        throw new TransformationException("Could not convert image", ex);
       }
-      this.formatString = targetFormat.name();
     }
     return this;
   }

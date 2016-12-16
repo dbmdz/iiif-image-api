@@ -32,7 +32,7 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
         floatValues[i] = Float.parseFloat(groups[i]);
       }
     } catch (NumberFormatException nfe) {
-      LOGGER.warn("Invalid value number.");
+      LOGGER.warn("Invalid value number: {}.", groups);
       throw new InvalidParametersException("Invalid value number. Must be integer or float");
     }
     return floatValues;
@@ -136,7 +136,7 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
     try {
       return Integer.parseInt(value);
     } catch (NumberFormatException nfe) {
-      LOGGER.warn("Invalid format.");
+      LOGGER.warn("Invalid format: {}.", value);
       throw new InvalidParametersException("Invalid format. Must be an integer!");
     }
   }
@@ -153,7 +153,7 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
         integerValues[i] = Integer.parseInt(groups[i]);
       }
     } catch (NumberFormatException nfe) {
-      LOGGER.warn("Invalid value number.");
+      LOGGER.warn("Invalid value number: {}.", groups);
       throw new InvalidParametersException("Invalid value number. Must be an integer.");
     }
     return integerValues;
