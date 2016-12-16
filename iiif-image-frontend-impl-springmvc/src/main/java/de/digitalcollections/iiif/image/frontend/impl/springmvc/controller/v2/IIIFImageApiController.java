@@ -25,11 +25,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.UnsupportedOperationException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.stream.IntStream;
-import java.lang.UnsupportedOperationException;
+
+import static java.lang.String.format;
 
 @Controller(value = "IIIFImageApiController-v2")
 @RequestMapping("/image/v2/")
@@ -53,24 +55,21 @@ public class IIIFImageApiController {
       requestURI = "/" + identifier + "/"; // For unit-tests
     }
     String idEndpoint = requestURI.substring(0, requestURI.lastIndexOf('/'));
-    String baseUrl;
+    
     String scheme = request.getHeader("X-Forwarded-Proto");
     if (scheme == null) {
       scheme = request.getScheme();
     }
-    String serverName = request.getHeader("x-forwarded-host");
-    if (serverName == null) {
-      serverName = request.getServerName();
+    
+    String host = request.getHeader("X-Forwarded-Host");
+    if (host == null) {
+      host = request.getServerName();
+      if (request.getServerPort() != 80) {
+        host += ":" + request.getServerPort();
+      }
     }
-    if (request.getServerPort() != 80) {
-      baseUrl = String.format("%s://%s:%d%s", scheme,
-              serverName, request.getServerPort(),
-              idEndpoint);
-    } else {
-      baseUrl = String.format("%s://%s%s", scheme,
-              serverName, idEndpoint);
-    }
-    return baseUrl;
+    
+    return format("%s://%s%s", scheme, host, idEndpoint);
   }
 
   /**
