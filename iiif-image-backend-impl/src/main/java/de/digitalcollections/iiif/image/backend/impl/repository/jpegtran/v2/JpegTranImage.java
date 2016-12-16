@@ -98,7 +98,7 @@ public class JpegTranImage implements Image {
   }
 
   @Override
-  public Image scale(ResizeParameters params) throws InvalidParametersException {
+  public Image scale(ResizeParameters params) throws InvalidParametersException, TransformationException {
     int oldWidth = getWidth();
     int oldHeight = getHeight();
 
@@ -111,7 +111,8 @@ public class JpegTranImage implements Image {
       jpegImage.downScale(newWidth, newHeight, 85);
     } catch (IllegalArgumentException|TJException e) {
       LOGGER.error("Downscaling image failed", e);
-      LOGGER.info("Tried to scale down from {}x{} to {}x{}", oldWidth, oldHeight, params.getWidth(), params.getHeight());
+      LOGGER.debug("Tried to scale down from {}x{} to {}x{}", oldWidth, oldHeight, params.getWidth(), params.getHeight());
+      throw new TransformationException("Downscaling failed", e);
     }
     return this;
   }

@@ -51,14 +51,14 @@ public class ImageDataRepositoryImpl {
   public byte[] getImageData(String identifier) throws ResolvingException {
     Resource resource = getImageResource(identifier);
     URI imageUri = resource.getUri();
-    LOGGER.info("URI for {} is {}", identifier, imageUri.toString());
+    LOGGER.debug("URI for {} is {}", identifier, imageUri.toString());
     return getImageData(imageUri);
   }
 
   InputStream getImageStream(String identifier) throws ResolvingException, ResourceIOException {
     Resource resource = getImageResource(identifier);
     URI imageUri = resource.getUri();
-    LOGGER.info("URI for {} is {}", identifier, imageUri.toString());
+    LOGGER.debug("URI for {} is {}", identifier, imageUri.toString());
     return resourceService.getInputStream(resource);
   }
 

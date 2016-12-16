@@ -26,7 +26,7 @@ public interface Image {
 
   Image crop(RegionParameters params) throws UnsupportedOperationException, InvalidParametersException;
 
-  Image scale(ResizeParameters params) throws UnsupportedOperationException, InvalidParametersException;
+  Image scale(ResizeParameters params) throws UnsupportedOperationException, InvalidParametersException, TransformationException;
 
   Image rotate(int arcDegree) throws UnsupportedOperationException, InvalidParametersException;
 
@@ -34,7 +34,7 @@ public interface Image {
 
   Image toDepth(ImageBitDepth depth) throws UnsupportedOperationException;
 
-  Image convert(ImageFormat format) throws UnsupportedOperationException;
+  Image convert(ImageFormat format) throws UnsupportedOperationException, TransformationException;
 
   void performTransformation() throws TransformationException;
 }

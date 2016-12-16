@@ -1,12 +1,30 @@
 package de.digitalcollections.iiif.image.frontend.impl.springmvc.controller.v2;
 
+import de.digitalcollections.commons.server.HttpLoggingUtilities;
+import de.digitalcollections.iiif.image.backend.impl.repository.jpegtran.v2.JpegTranImage;
 import de.digitalcollections.iiif.image.business.api.service.v2.IiifParameterParserService;
 import de.digitalcollections.iiif.image.business.api.service.v2.ImageService;
-import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.*;
+import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.InvalidParametersException;
+import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResolvingException;
+import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.ResourceNotFoundException;
 import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException;
+import de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.UnsupportedFormatException;
 import de.digitalcollections.iiif.image.model.api.enums.ImageBitDepth;
 import de.digitalcollections.iiif.image.model.api.enums.ImageFormat;
-import de.digitalcollections.iiif.image.model.api.v2.*;
+import de.digitalcollections.iiif.image.model.api.v2.Image;
+import de.digitalcollections.iiif.image.model.api.v2.ImageInfo;
+import de.digitalcollections.iiif.image.model.api.v2.RegionParameters;
+import de.digitalcollections.iiif.image.model.api.v2.ResizeParameters;
+import de.digitalcollections.iiif.image.model.api.v2.RotationParameters;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.util.Collections;
+import java.util.stream.IntStream;
+import javax.servlet.http.HttpServletRequest;
+import net.logstash.logback.marker.LogstashMarker;
+import static net.logstash.logback.marker.Markers.append;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -21,17 +39,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.UnsupportedOperationException;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.util.Collections;
-import java.util.stream.IntStream;
-
-import static java.lang.String.format;
 
 @Controller(value = "IIIFImageApiController-v2")
 @RequestMapping("/image/v2/")
@@ -69,7 +76,7 @@ public class IIIFImageApiController {
       }
     }
     
-    return format("%s://%s%s", scheme, host, idEndpoint);
+    return String.format("%s://%s%s", scheme, host, idEndpoint);
   }
 
   /**
@@ -116,10 +123,15 @@ public class IIIFImageApiController {
           UnsupportedFormatException, UnsupportedOperationException, IOException,
           URISyntaxException, InvalidParametersException,
           de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException {
-    final String requestURI = request.getRequestURI();
-    LOGGER.info("getImageRepresentation for url {}", requestURI);
-
     HttpHeaders headers = new HttpHeaders();
+
+    LogstashMarker marker = HttpLoggingUtilities.makeRequestLoggingMarker(request)
+        .and(append("iiifFormat", format))
+        .and(append("iiifQuality", quality))
+        .and(append("iiifRotation", rotation))
+        .and(append("iiifSize", size))
+        .and(append("iiifRegion", region))
+        .and(append("imageId", identifier));
 
     try {
       RegionParameters regionParameters = iiifParameterParserService.parseIiifRegion(region);
@@ -147,14 +159,20 @@ public class IIIFImageApiController {
       byte[] data = image.toByteArray();
 
       final ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(data, headers, HttpStatus.OK);
+      marker.and(append("imageBackend", (image instanceof JpegTranImage) ? "turbojpeg" : "imageio"));
+      LOGGER.info(marker, "Successfully served image for {}", request.getPathInfo());
       return responseEntity;
     } catch (de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException ex) {
+      LOGGER.info(marker, "Request contained invalid parameters in {}", request.getPathInfo(), ex);
       throw new InvalidParametersException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
+      LOGGER.info(marker, "Unsupported format ({}) was request in {}", format, request.getPathInfo());
       throw new UnsupportedFormatException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.v2.TransformationException ex) {
+      LOGGER.error(marker, "Error during transformation for {}", request.getPathInfo(), ex);
       throw new TransformationException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException e) {
+      LOGGER.info(marker, "Could not find image for {}", request.getPathInfo());
       throw new ResourceNotFoundException();
     }
   }
@@ -186,8 +204,13 @@ public class IIIFImageApiController {
   public ResponseEntity<String> getInfo(@PathVariable String identifier,
           HttpServletRequest request) throws ResolvingException,
       UnsupportedFormatException, UnsupportedOperationException, UnsupportedEncodingException {
+
     try {
       identifier = URLDecoder.decode(identifier, "UTF-8");
+
+      LogstashMarker marker = HttpLoggingUtilities.makeRequestLoggingMarker(request)
+          .and(append("imageId", identifier));
+
       String baseUrl = getBasePath(request, identifier);
       ImageInfo img = imageService.getImageInfo(identifier);
       JSONObject info = new JSONObject();
@@ -199,8 +222,12 @@ public class IIIFImageApiController {
       info.put("height", img.getHeight()); // The height in pixels of the full image content, given as an integer.
       info.put("profile", profiles); // An array of profiles, indicated by either a URI or an object describing the features supported. The first entry in the array must be a compliance level URI, as defined below.
       info.put("protocol", "http://iiif.io/api/image");
+
+      // Add scale factors that are ideal for the TurboJPEG implementation
       JSONArray scaleFactors = new JSONArray();
       Collections.addAll(scaleFactors, 1, 2, 4, 8, 16, 32);
+
+      // Ditto for tiles
       JSONArray tiles = new JSONArray();
       IntStream.of(128, 256, 512)
               .mapToObj(size -> {
