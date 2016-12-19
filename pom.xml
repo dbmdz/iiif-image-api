@@ -75,7 +75,6 @@
     <version.json-simple>1.1.1</version.json-simple>
     <version.junit>4.10</version.junit>
     <version.logback>1.1.7</version.logback>
-    <version.logback-spring>0.1.4</version.logback-spring>
     <version.logstash>4.7</version.logstash>
     <version.maven-compiler-plugin>3.3</version.maven-compiler-plugin>
     <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
@@ -212,11 +211,6 @@
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-core</artifactId>
         <version>${version.logback}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.logback-extensions</groupId>
-        <artifactId>logback-ext-spring</artifactId>
-        <version>${version.logback-spring}</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
