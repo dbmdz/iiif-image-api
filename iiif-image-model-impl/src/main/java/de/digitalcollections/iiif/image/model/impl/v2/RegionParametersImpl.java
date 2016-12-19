@@ -23,30 +23,24 @@ public class RegionParametersImpl implements RegionParameters {
   }
 
   /**
-   * Region is given by percentage scales. Region params are calculated relative to original image size.
-   *
-   * @param regionParameters
-   * @param origWidth
-   * @param origHeight
-   * @throws de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException
+   * Make the parameters absolute by supplying the dimensions of the image the operation is applied to.
    */
-  public RegionParametersImpl(RegionParametersImpl regionParameters, int origWidth, int origHeight) throws InvalidParametersException {
-    assert regionParameters != null;
-    assert !regionParameters.isAbsolute();
-
-    if (regionParameters.getHorizontalOffset() > origWidth || regionParameters.getVerticalOffset() > origHeight) {
+  @Override
+  public void makeAbsolute(int imageWidth, int imageHeight) throws InvalidParametersException {
+    this.horizontalOffset = getHorizontalOffset() * imageWidth;
+    this.verticalOffset = getVerticalOffset() * imageHeight;
+    this.width = getWidth() * imageWidth;
+    this.height = getHeight() * imageHeight;
+    if (width > (imageWidth - horizontalOffset)) {
+      this.width = imageWidth - horizontalOffset;
+    }
+    if (height > (imageHeight - verticalOffset)) {
+      this.height = imageHeight - verticalOffset;
+    }
+    if (getHorizontalOffset() > imageWidth || getVerticalOffset() > imageHeight) {
       throw new InvalidParametersException("Either vertical or horizontal offset are outside of the image.");
     }
-    this.horizontalOffset = regionParameters.getHorizontalOffset() * (float) origWidth;
-    this.verticalOffset = regionParameters.getVerticalOffset() * (float) origHeight;
-    this.width = width * (float) origWidth;
-    this.height = height * (float) origHeight;
-    if (width > (origWidth - horizontalOffset)) {
-      this.width = origWidth - horizontalOffset;
-    }
-    if (height > (origHeight - verticalOffset)) {
-      this.height = origHeight - verticalOffset;
-    }
+    this.absolute = true;
   }
 
   @Override

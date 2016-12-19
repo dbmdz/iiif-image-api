@@ -11,6 +11,8 @@ import de.digitalcollections.iiif.image.model.api.v2.RotationParameters;
 import de.digitalcollections.iiif.image.model.impl.v2.RegionParametersImpl;
 import de.digitalcollections.iiif.image.model.impl.v2.ResizeParametersImpl;
 import de.digitalcollections.iiif.image.model.impl.v2.RotationParametersImpl;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,11 @@ import org.springframework.stereotype.Service;
 public class IiifParameterParserServiceImpl implements IiifParameterParserService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IiifParameterParserServiceImpl.class);
+
+  private static DoubleStream makeDoubleStream(float[] vals) {
+    return IntStream.range(0, vals.length)
+        .mapToDouble(i -> vals[i]);
+  }
 
   private float[] parseFloatValues(String values, int expectedSize) throws InvalidParametersException {
     String[] groups = values.split(",");
@@ -72,14 +79,19 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
       // The complete image is returned, without any cropping.
       return null; // indicates that no region has to be cropped
     }
+    float[] dimensions;
     RegionParameters params = new RegionParametersImpl();
     if (region.startsWith("pct:")) {
       region = region.substring("pct:".length());
+      dimensions = parseFloatValues(region, 4);
       params.setAbsolute(false);
+      for (int i = 0; i < dimensions.length; i++) {
+        dimensions[i] = dimensions[i] / 100;
+      }
     } else {
+      dimensions = parseFloatValues(region, 4);
       params.setAbsolute(true);
     }
-    float[] dimensions = parseFloatValues(region, 4);
     params.setHorizontalOffset(dimensions[0]);
     params.setVerticalOffset(dimensions[1]);
     params.setWidth(dimensions[2]);

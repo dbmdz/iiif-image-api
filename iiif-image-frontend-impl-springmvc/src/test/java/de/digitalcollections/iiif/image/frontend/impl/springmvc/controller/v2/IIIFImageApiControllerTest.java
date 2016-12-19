@@ -311,6 +311,16 @@ public class IIIFImageApiControllerTest {
   }
 
   @Test
+  public void testRelativeCropWithAbsoluteScale() throws Exception {
+    byte[] imgData = mockMvc
+        .perform(get("/image/" + IIIFImageApiController.VERSION + "/file-zoom/pct:10,20,20,20/500,/0/native.jpg"))
+        .andExpect(status().isOk())
+        .andReturn().getResponse().getContentAsByteArray();
+    Image image = loadImage(imgData, true);
+    Assert.assertTrue(image.getWidth() != image.getHeight());
+  }
+
+  @Test
   public void testUrlEncodedIdentifiers() throws Exception {
     mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/" + URLEncoder.
             encode("spec:/ial?file#with[special]ch@arac%ters", "utf8") + "/info.json")

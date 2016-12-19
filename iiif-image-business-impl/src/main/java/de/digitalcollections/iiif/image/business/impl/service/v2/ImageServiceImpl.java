@@ -88,6 +88,11 @@ public class ImageServiceImpl implements ImageService {
                                ImageFormat formatParameter)
       throws InvalidParametersException, UnsupportedOperationException, UnsupportedFormatException, TransformationException {
 
+    // Convert relative to absolute region parameters
+    if (regionParameters != null && !regionParameters.isAbsolute()) {
+      regionParameters.makeAbsolute(image.getWidth(), image.getHeight());
+    }
+
     // now do processing:
     if (regionParameters != null && (image.getWidth() != regionParameters.getWidth()
         || image.getHeight() != regionParameters.getHeight())) {

@@ -135,23 +135,28 @@ public class JAIImage implements Image {
   @Override
   public Image crop(RegionParameters params) throws UnsupportedOperationException, InvalidParametersException {
     int x, y, targetWidth, targetHeight;
-    // if absolute the cropping has been done before during reading the buffered image
-    if (!params.isAbsolute()) {
+    if (params.isAbsolute()) {
+      x = (int) Math.ceil(params.getHorizontalOffset());
+      y = (int) Math.ceil(params.getVerticalOffset());
+      targetWidth = (int) Math.ceil(params.getWidth());
+      targetHeight = (int) Math.ceil(params.getHeight());
+    } else {
       x = (int) Math.ceil(image.getWidth() * (params.getHorizontalOffset()) / 100);
       y = (int) Math.ceil(image.getHeight() * (params.getVerticalOffset()) / 100);
       targetWidth = (int) Math.ceil(image.getWidth() * (params.getWidth()) / 100);
       targetHeight = (int) Math.ceil(image.getHeight() * (params.getHeight()) / 100);
+    }
 
-      if (x >= getWidth() || y >= getHeight()) {
-        throw new InvalidParametersException("x and/or y are out of bounds.");
-      }
-      if ((x + targetWidth) > getWidth()) {
-        targetWidth = getWidth() - x;
-      }
-      if ((y + targetHeight) > getHeight()) {
-        targetHeight = getHeight() - y;
-      }
-
+    if (x >= getWidth() || y >= getHeight()) {
+      throw new InvalidParametersException("x and/or y are out of bounds.");
+    }
+    if ((x + targetWidth) > getWidth()) {
+      targetWidth = getWidth() - x;
+    }
+    if ((y + targetHeight) > getHeight()) {
+      targetHeight = getHeight() - y;
+    }
+    if (targetHeight != this.image.getHeight() || targetWidth != this.image.getWidth()) {
       BufferedImage dest = image.getSubimage(x, y, targetWidth, targetHeight);
       this.image = dest;
     }

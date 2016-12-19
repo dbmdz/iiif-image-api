@@ -1,9 +1,13 @@
 package de.digitalcollections.iiif.image.model.api.v2;
 
+import de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException;
+
 /**
  * Container for type safe image region parameters.
  */
 public interface RegionParameters {
+
+  void makeAbsolute(int imageWidth, int imageHeight) throws InvalidParametersException;
 
   float getHeight();
 
