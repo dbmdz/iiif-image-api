@@ -62,20 +62,21 @@ public class IIIFImageApiController {
       requestURI = "/" + identifier + "/"; // For unit-tests
     }
     String idEndpoint = requestURI.substring(0, requestURI.lastIndexOf('/'));
-    String baseUrl;
+    
     String scheme = request.getHeader("X-Forwarded-Proto");
     if (scheme == null) {
       scheme = request.getScheme();
     }
-    if (request.getServerPort() != 80) {
-      baseUrl = String.format("%s://%s:%d%s", scheme,
-              request.getServerName(), request.getServerPort(),
-              idEndpoint);
-    } else {
-      baseUrl = String.format("%s://%s%s", scheme,
-              request.getServerName(), idEndpoint);
+    
+    String host = request.getHeader("X-Forwarded-Host");
+    if (host == null) {
+      host = request.getServerName();
+      if (request.getServerPort() != 80) {
+        host += ":" + request.getServerPort();
+      }
     }
-    return baseUrl;
+    
+    return String.format("%s://%s%s", scheme, host, idEndpoint);
   }
 
   /**
