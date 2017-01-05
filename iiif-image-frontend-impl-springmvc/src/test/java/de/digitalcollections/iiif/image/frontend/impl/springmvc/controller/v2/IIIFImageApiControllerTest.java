@@ -183,7 +183,7 @@ public class IIIFImageApiControllerTest {
 
   @Test
   public void testXForwardedHost() throws Exception {
-      mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-google/info.json")
+      mockMvc.perform(get("http://localhost:8080/image/" + IIIFImageApiController.VERSION + "/http-google/info.json")
               .header("X-Forwarded-Host", "example.org"))
               .andExpect(jsonPath("$.@id").value("http://example.org/image/" + IIIFImageApiController.VERSION + "/http-google"));
   }
@@ -195,6 +195,14 @@ public class IIIFImageApiControllerTest {
             .andExpect(jsonPath("$.@id").value("http://example.org:8080/image/" + IIIFImageApiController.VERSION + "/http-google"));
   }
 
+  @Test
+  public void testXForwardedPort() throws Exception {
+    mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-google/info.json")
+            .header("X-Forwarded-Port", "8080"))
+            .andExpect(jsonPath("$.@id").value("http://localhost:8080/image/" + IIIFImageApiController.VERSION + "/http-google"));
+  }
+  
+  
 
   /* 4.1 Region */
   @Test
