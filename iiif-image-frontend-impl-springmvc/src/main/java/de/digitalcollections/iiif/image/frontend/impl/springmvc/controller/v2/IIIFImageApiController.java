@@ -71,9 +71,14 @@ public class IIIFImageApiController {
     String host = request.getHeader("X-Forwarded-Host");
     if (host == null) {
       host = request.getServerName();
-      if (request.getServerPort() != 80) {
-        host += ":" + request.getServerPort();
-      }
+    }
+
+    String port = request.getHeader("X-Forwarded-Port");
+    if (port == null) {
+      port = String.valueOf(request.getServerPort());
+    }
+    if (!"80".equals(port)) {
+      host += ":" + port;
     }
     
     return String.format("%s://%s%s", scheme, host, idEndpoint);
