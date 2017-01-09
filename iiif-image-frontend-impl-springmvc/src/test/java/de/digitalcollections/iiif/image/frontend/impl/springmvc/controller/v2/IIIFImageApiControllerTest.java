@@ -78,7 +78,7 @@ public class IIIFImageApiControllerTest {
   /* 5. Information Request */
   @Test
   public void getZendInfo() throws Exception {
-    mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-bsb/info.json"))
+    mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-bsb/info.json").header("Host", "localhost"))
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json"))
             .andExpect(header().string("Link", "<http://iiif.io/api/image/2/context.json>; "
@@ -175,8 +175,17 @@ public class IIIFImageApiControllerTest {
   }
 
   @Test
+  public void testNonStandardPort() throws Exception {
+    mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-google/info.json")
+        .header("Host", "example.com:8080"))
+        .andExpect(jsonPath("$.@id").value("http://example.com:8080/image/" + IIIFImageApiController.VERSION + "/http-google"));
+
+  }
+
+  @Test
   public void testXForwardedProto() throws Exception {
     mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/http-google/info.json")
+            .header("Host", "localhost")
             .header("X-Forwarded-Proto", "https"))
             .andExpect(jsonPath("$.@id").value("https://localhost/image/" + IIIFImageApiController.VERSION + "/http-google"));
   }
@@ -345,6 +354,7 @@ public class IIIFImageApiControllerTest {
   public void testUrlEncodedIdentifiers() throws Exception {
     mockMvc.perform(get("/image/" + IIIFImageApiController.VERSION + "/" + URLEncoder.
             encode("spec:/ial?file#with[special]ch@arac%ters", "utf8") + "/info.json")
+            .header("Host", "localhost")
             .header("Referer", "http://localhost/foobar"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.@id").
