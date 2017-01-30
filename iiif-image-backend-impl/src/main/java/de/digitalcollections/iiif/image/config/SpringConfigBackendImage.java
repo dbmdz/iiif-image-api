@@ -12,7 +12,6 @@ import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -24,9 +23,6 @@ import org.springframework.core.io.ResourceLoader;
 @ComponentScan(basePackages = {
   "de.digitalcollections.iiif.image.backend.impl.repository",
   "de.digitalcollections.core.config"
-})
-@PropertySource(value = {
-  "classpath:de/digitalcollections/iiif/image/config/SpringConfigBackend-${spring.profiles.active:PROD}.properties"
 })
 @EnableCaching
 public class SpringConfigBackendImage {
