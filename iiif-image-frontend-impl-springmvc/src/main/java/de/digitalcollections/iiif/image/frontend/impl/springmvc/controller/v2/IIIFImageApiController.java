@@ -155,11 +155,10 @@ public class IIIFImageApiController {
       // content
       byte[] data = image.toByteArray();
 
-      final ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(data, headers, HttpStatus.OK);
       marker.and(append("imageBackend", (image instanceof JpegTranImage) ? "turbojpeg" : "imageio"));
       LOGGER.info(marker, "Successfully served image for {}", request.getPathInfo());
       headers.set("X-IIIF-Image-Backend", image instanceof JpegTranImage ? "fast" : "slow");
-      return responseEntity;
+      return new ResponseEntity<>(data, headers, HttpStatus.OK);
     } catch (de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException ex) {
       LOGGER.info(marker, "Request contained invalid parameters in {}", request.getPathInfo(), ex);
       throw new InvalidParametersException(ex.getMessage());
