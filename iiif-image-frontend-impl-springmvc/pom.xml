@@ -72,6 +72,10 @@
       <artifactId>iiif-image-model-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>de.digitalcollections.commons</groupId>
+      <artifactId>digitalcollections-commons-server</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
     </dependency>
@@ -101,10 +105,6 @@
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>de.digitalcollections.commons</groupId>
-      <artifactId>digitalcollections-commons-server</artifactId>
     </dependency>
   </dependencies>
 </project>
