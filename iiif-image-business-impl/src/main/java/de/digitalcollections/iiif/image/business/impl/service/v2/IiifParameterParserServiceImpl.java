@@ -24,7 +24,7 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
 
   private static DoubleStream makeDoubleStream(float[] vals) {
     return IntStream.range(0, vals.length)
-        .mapToDouble(i -> vals[i]);
+            .mapToDouble(i -> vals[i]);
   }
 
   private float[] parseFloatValues(String values, int expectedSize) throws InvalidParametersException {
@@ -34,13 +34,13 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
       throw new InvalidParametersException("Invalid values definition. " + expectedSize + " float numbers needed!");
     }
     float[] floatValues = new float[expectedSize];
-    try {
-      for (int i = 0; i < groups.length; i++) {
+    for (int i = 0; i < groups.length; i++) {
+      try {
         floatValues[i] = Float.parseFloat(groups[i]);
+      } catch (NumberFormatException nfe) {
+        LOGGER.warn("Invalid value number: {}.", groups[i]);
+        throw new InvalidParametersException("Invalid value number. Must be integer or float");
       }
-    } catch (NumberFormatException nfe) {
-      LOGGER.warn("Invalid value number: {}.", groups);
-      throw new InvalidParametersException("Invalid value number. Must be integer or float");
     }
     return floatValues;
   }
@@ -160,13 +160,13 @@ public class IiifParameterParserServiceImpl implements IiifParameterParserServic
       throw new InvalidParametersException("Invalid values definition. " + expectedSize + " integer numbers needed!");
     }
     int[] integerValues = new int[expectedSize];
-    try {
-      for (int i = 0; i < groups.length; i++) {
+    for (int i = 0; i < groups.length; i++) {
+      try {
         integerValues[i] = Integer.parseInt(groups[i]);
+      } catch (NumberFormatException nfe) {
+        LOGGER.warn("Invalid value number: {}.", groups[i]);
+        throw new InvalidParametersException("Invalid value number. Must be an integer.");
       }
-    } catch (NumberFormatException nfe) {
-      LOGGER.warn("Invalid value number: {}.", groups);
-      throw new InvalidParametersException("Invalid value number. Must be an integer.");
     }
     return integerValues;
   }
