@@ -62,17 +62,17 @@ public class IIIFImageApiController {
       requestURI = "/" + identifier + "/"; // For unit-tests
     }
     String idEndpoint = requestURI.substring(0, requestURI.lastIndexOf('/'));
-    
+
     String scheme = request.getHeader("X-Forwarded-Proto");
     if (scheme == null) {
       scheme = request.getScheme();
     }
-    
+
     String host = request.getHeader("X-Forwarded-Host");
     if (host == null) {
       host = request.getHeader("Host");
     }
-    
+
     return String.format("%s://%s%s", scheme, host, idEndpoint);
   }
 
@@ -123,12 +123,12 @@ public class IIIFImageApiController {
     HttpHeaders headers = new HttpHeaders();
 
     LogstashMarker marker = HttpLoggingUtilities.makeRequestLoggingMarker(request)
-        .and(append("iiifFormat", format))
-        .and(append("iiifQuality", quality))
-        .and(append("iiifRotation", rotation))
-        .and(append("iiifSize", size))
-        .and(append("iiifRegion", region))
-        .and(append("imageId", identifier));
+            .and(append("iiifFormat", format))
+            .and(append("iiifQuality", quality))
+            .and(append("iiifRotation", rotation))
+            .and(append("iiifSize", size))
+            .and(append("iiifRegion", region))
+            .and(append("imageId", identifier));
 
     try {
       RegionParameters regionParameters = iiifParameterParserService.parseIiifRegion(region);
@@ -163,7 +163,8 @@ public class IIIFImageApiController {
       LOGGER.info(marker, "Request contained invalid parameters in {}", request.getPathInfo(), ex);
       throw new InvalidParametersException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
-      LOGGER.info(marker, "Unsupported format ({}) was request in {}", format, request.getPathInfo());
+      LOGGER.info(marker, "Unsupported format ({}) was request in {}", format,
+              request.getPathInfo());
       throw new UnsupportedFormatException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.v2.TransformationException ex) {
       LOGGER.error(marker, "Error during transformation for {}", request.getPathInfo(), ex);
@@ -192,7 +193,6 @@ public class IIIFImageApiController {
    * @return The information in JSON notation
    * @throws ResolvingException if identifier can not be resolved to an image
    * @throws UnsupportedFormatException if target format is not supported
-   * @throws IOException if image can not be read
    */
   @SuppressWarnings("unchecked")
   @CrossOrigin(allowedHeaders = {"*"}, origins = {"*"})
@@ -200,13 +200,13 @@ public class IIIFImageApiController {
           method = {RequestMethod.GET, RequestMethod.HEAD})
   public ResponseEntity<String> getInfo(@PathVariable String identifier,
           HttpServletRequest request) throws ResolvingException,
-      UnsupportedFormatException, UnsupportedOperationException, UnsupportedEncodingException {
+          UnsupportedFormatException, UnsupportedOperationException, UnsupportedEncodingException {
 
     try {
       identifier = URLDecoder.decode(identifier, "UTF-8");
 
       LogstashMarker marker = HttpLoggingUtilities.makeRequestLoggingMarker(request)
-          .and(append("imageId", identifier));
+              .and(append("imageId", identifier));
 
       String baseUrl = getBasePath(request, identifier);
       ImageInfo img = imageService.getImageInfo(identifier);
@@ -248,6 +248,7 @@ public class IIIFImageApiController {
                 + "type=\"application/ld+json\"");
       }
       String json = info.toJSONString();
+      LOGGER.info(marker, "Serving info.json for image {}", identifier);
       return new ResponseEntity<>(json, headers, HttpStatus.OK);
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
       throw new UnsupportedFormatException(ex.getMessage());
