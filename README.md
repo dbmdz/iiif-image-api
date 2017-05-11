@@ -71,6 +71,11 @@ Depending on what library you want use, these are the dependency definitions for
   <version>${version.iiif-image}</version>
 </dependency>
 ```
+### Configuration
+
+#### File resolving of backend
+
+The default implementation (see <https://github.com/dbmdz/digitalcollections-core/tree/master/digitalcollections-core-backend/digitalcollections-core-backend-impl-file>) for the backend repository is file based and can be configured by using regular expressions.
 
 ### Embed IIIF-Controller into your Spring MVC webapplication</h3>
 
