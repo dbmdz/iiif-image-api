@@ -23,12 +23,11 @@ import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
-import net.logstash.logback.marker.LogstashMarker;
-import static net.logstash.logback.marker.Markers.append;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -122,13 +121,13 @@ public class IIIFImageApiController {
           de.digitalcollections.iiif.image.frontend.impl.springmvc.exception.TransformationException {
     HttpHeaders headers = new HttpHeaders();
 
-    LogstashMarker marker = HttpLoggingUtilities.makeRequestLoggingMarker(request)
-            .and(append("iiifFormat", format))
-            .and(append("iiifQuality", quality))
-            .and(append("iiifRotation", rotation))
-            .and(append("iiifSize", size))
-            .and(append("iiifRegion", region))
-            .and(append("imageId", identifier));
+    HttpLoggingUtilities.addRequestClientInfoToMDC(request);
+    MDC.put("iiifFormat", format);
+    MDC.put("iiifQuality", quality);
+    MDC.put("iiifRotation", rotation);
+    MDC.put("iiifSize", size);
+    MDC.put("iiifRegion", region);
+    MDC.put("imageId", identifier);
 
     try {
       RegionParameters regionParameters = iiifParameterParserService.parseIiifRegion(region);
@@ -155,23 +154,24 @@ public class IIIFImageApiController {
       // content
       byte[] data = image.toByteArray();
 
-      marker.and(append("imageBackend", (image instanceof JpegTranImage) ? "turbojpeg" : "imageio"));
-      LOGGER.info(marker, "Successfully served image for {}", request.getPathInfo());
+      MDC.put("imageBackend", (image instanceof JpegTranImage) ? "turbojpeg" : "imageio");
+      LOGGER.info("Successfully served image for {}", request.getPathInfo());
       headers.set("X-IIIF-Image-Backend", image instanceof JpegTranImage ? "fast" : "slow");
       return new ResponseEntity<>(data, headers, HttpStatus.OK);
     } catch (de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException ex) {
-      LOGGER.info(marker, "Request contained invalid parameters in {}", request.getPathInfo(), ex);
+      LOGGER.info("Request contained invalid parameters in {}", request.getPathInfo(), ex);
       throw new InvalidParametersException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
-      LOGGER.info(marker, "Unsupported format ({}) was request in {}", format,
-              request.getPathInfo());
+      LOGGER.info("Unsupported format ({}) was request in {}", format, request.getPathInfo());
       throw new UnsupportedFormatException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.v2.TransformationException ex) {
-      LOGGER.error(marker, "Error during transformation for {}", request.getPathInfo(), ex);
+      LOGGER.error("Error during transformation for {}", request.getPathInfo(), ex);
       throw new TransformationException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException e) {
-      LOGGER.info(marker, "Could not find image for {}", request.getPathInfo());
+      LOGGER.info("Could not find image for {}", request.getPathInfo());
       throw new ResourceNotFoundException();
+    } finally {
+      MDC.clear();
     }
   }
 
@@ -205,8 +205,8 @@ public class IIIFImageApiController {
     try {
       identifier = URLDecoder.decode(identifier, "UTF-8");
 
-      LogstashMarker marker = HttpLoggingUtilities.makeRequestLoggingMarker(request)
-              .and(append("imageId", identifier));
+      HttpLoggingUtilities.addRequestClientInfoToMDC(request);
+      MDC.put("imageId", identifier);
 
       String baseUrl = getBasePath(request, identifier);
       ImageInfo img = imageService.getImageInfo(identifier);
@@ -248,12 +248,14 @@ public class IIIFImageApiController {
                 + "type=\"application/ld+json\"");
       }
       String json = info.toJSONString();
-      LOGGER.info(marker, "Serving info.json for image {}", identifier);
+      LOGGER.info("Serving info.json for image {}", identifier);
       return new ResponseEntity<>(json, headers, HttpStatus.OK);
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
       throw new UnsupportedFormatException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException e) {
       throw new ResourceNotFoundException();
+    } finally {
+      MDC.clear();
     }
   }
 
