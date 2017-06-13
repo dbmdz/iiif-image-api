@@ -129,6 +129,13 @@ public class IIIFImageApiController {
     MDC.put("iiifRegion", region);
     MDC.put("imageId", identifier);
 
+    String path;
+    if (request.getPathInfo() != null) {
+      path = request.getPathInfo();
+    } else {
+      path = request.getServletPath();
+    }
+
     try {
       RegionParameters regionParameters = iiifParameterParserService.parseIiifRegion(region);
       ResizeParameters sizeParameters = iiifParameterParserService.parseIiifSize(size);
@@ -143,12 +150,7 @@ public class IIIFImageApiController {
       final ImageFormat imageFormat = image.getFormat();
       final String mimeType = imageFormat.getMimeType();
       headers.setContentType(MediaType.parseMediaType(mimeType));
-      String path;
-      if (request.getPathInfo() != null) {
-        path = request.getPathInfo();
-      } else {
-        path = request.getServletPath();
-      }
+
       String filename = path.replaceFirst("/image/", "").replace('/', '_').replace(',', '_');
       headers.set("Content-Disposition", "attachment; filename=" + filename);
       // content
@@ -159,16 +161,16 @@ public class IIIFImageApiController {
       headers.set("X-IIIF-Image-Backend", image instanceof JpegTranImage ? "fast" : "slow");
       return new ResponseEntity<>(data, headers, HttpStatus.OK);
     } catch (de.digitalcollections.iiif.image.model.api.exception.InvalidParametersException ex) {
-      LOGGER.info("Request contained invalid parameters in {}", request.getPathInfo(), ex);
+      LOGGER.info("Request contained invalid parameters in {}", path, ex);
       throw new InvalidParametersException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.UnsupportedFormatException ex) {
-      LOGGER.info("Unsupported format ({}) was request in {}", format, request.getPathInfo());
+      LOGGER.info("Unsupported format ({}) was request in {}", format, path);
       throw new UnsupportedFormatException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.v2.TransformationException ex) {
-      LOGGER.error("Error during transformation for {}", request.getPathInfo(), ex);
+      LOGGER.error("Error during transformation for {}", path, ex);
       throw new TransformationException(ex.getMessage());
     } catch (de.digitalcollections.iiif.image.model.api.exception.ResourceNotFoundException e) {
-      LOGGER.info("Could not find image for {}", request.getPathInfo());
+      LOGGER.info("Could not find image for {}", path);
       throw new ResourceNotFoundException();
     } finally {
       MDC.clear();
