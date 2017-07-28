@@ -5,7 +5,7 @@
   <parent>
     <groupId>de.digitalcollections</groupId>
     <artifactId>iiif-image-api</artifactId>
-    <version>2.2.6</version>
+    <version>2.2.7-SNAPSHOT</version>
   </parent>
   
   <artifactId>iiif-image-model-api</artifactId>

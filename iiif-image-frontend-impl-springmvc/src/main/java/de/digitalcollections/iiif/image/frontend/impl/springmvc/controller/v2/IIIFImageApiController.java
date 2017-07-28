@@ -152,7 +152,7 @@ public class IIIFImageApiController {
       headers.setContentType(MediaType.parseMediaType(mimeType));
 
       String filename = path.replaceFirst("/image/", "").replace('/', '_').replace(',', '_');
-      headers.set("Content-Disposition", "attachment; filename=" + filename);
+      headers.set("Content-Disposition", "inline; filename=" + filename);
       // content
       byte[] data = image.toByteArray();
 
