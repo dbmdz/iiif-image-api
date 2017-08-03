@@ -5,7 +5,7 @@
 
   <groupId>de.digitalcollections</groupId>
   <artifactId>iiif-image-api</artifactId>
-  <version>2.2.7-SNAPSHOT</version>
+  <version>2.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <modules>
@@ -19,7 +19,7 @@
   </modules>
 
   <name>DigitalCollections: IIIF Image API Library</name>
-  <description>Java library implementing the IIIF Image API 2.0.0 (see http://iiif.io/api/image/2.0/)</description>
+  <description>Java library implementing the IIIF Image API 2.1 (see http://iiif.io/api/image/2.1/)</description>
 
   <url>https://github.com/dbmdz/iiif-image-api</url>
   <licenses>
@@ -64,8 +64,8 @@
     <version.cache-api>1.0.0</version.cache-api>
     <version.commons-io>2.5</version.commons-io>
     <version.commons-lang3>3.4</version.commons-lang3>
-    <version.digitalcollections-commons>1.2.2</version.digitalcollections-commons>
-    <version.digitalcollections-core>1.2.5</version.digitalcollections-core>
+    <version.digitalcollections-commons>1.2.4-SNAPSHOT</version.digitalcollections-commons>
+    <version.digitalcollections-core>2.0.0-SNAPSHOT</version.digitalcollections-core>
     <version.ehcache>3.1.3</version.ehcache>
     <version.fluent-hc>4.5.3</version.fluent-hc>
     <version.geoip>2.8.0</version.geoip>
@@ -250,35 +250,27 @@
       </dependency>
       <dependency>
         <groupId>de.digitalcollections.commons</groupId>
-        <artifactId>digitalcollections-commons-server</artifactId>
+        <artifactId>dc-commons-server</artifactId>
         <version>${version.digitalcollections-commons}</version>
       </dependency>
       <dependency>
-        <groupId>de.digitalcollections</groupId>
-        <artifactId>digitalcollections-core-backend-api</artifactId>
-        <version>${version.digitalcollections-core}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>de.digitalcollections</groupId>
-        <artifactId>digitalcollections-core-backend-impl-file</artifactId>
-        <version>${version.digitalcollections-core}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>de.digitalcollections</groupId>
-        <artifactId>digitalcollections-core-business-api</artifactId>
+        <groupId>de.digitalcollections.core</groupId>
+        <artifactId>dc-core-backend-api</artifactId>
         <version>${version.digitalcollections-core}</version>
       </dependency>
       <dependency>
-        <groupId>de.digitalcollections</groupId>
-        <artifactId>digitalcollections-core-business-impl</artifactId>
+        <groupId>de.digitalcollections.core</groupId>
+        <artifactId>dc-core-backend-file</artifactId>
         <version>${version.digitalcollections-core}</version>
-        <scope>runtime</scope>
       </dependency>
       <dependency>
-        <groupId>de.digitalcollections</groupId>
-        <artifactId>digitalcollections-core-model-api</artifactId>
+        <groupId>de.digitalcollections.core</groupId>
+        <artifactId>dc-core-business</artifactId>
+        <version>${version.digitalcollections-core}</version>
+      </dependency>
+      <dependency>
+        <groupId>de.digitalcollections.core</groupId>
+        <artifactId>dc-core-model</artifactId>
         <version>${version.digitalcollections-core}</version>
       </dependency>
       <dependency>
