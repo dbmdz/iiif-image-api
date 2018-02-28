@@ -1,3 +1,5 @@
+:warning: **NOTE**: This has been deprecated by https://github.com/dbmdz-iiif-apis :warning:
+
 # IIIF Image API Java Libraries
 
 [![Build Status](https://travis-ci.org/dbmdz/iiif-image-api.svg?branch=master)](https://travis-ci.org/dbmdz/iiif-image-api)
